@@ -26,7 +26,7 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
 
 MIP2=$(wget -qO- ipv4.icanhazip.com)
 [[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
-sudo apt install translate-shell
+[[ $(dpkg --get-selections|grep -w "translate-shell"|head -1) ]] || apt-get install translate-shell -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "nano"|head -1) ]] || apt-get install nano -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] || apt-get install bc -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] || apt-get install screen -y &>/dev/null
@@ -39,11 +39,10 @@ sudo apt install translate-shell
 [[ $(dpkg --get-selections|grep -w "lsof"|head -1) ]] || apt-get install lsof -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "apache2"|head -1) ]] || {
  apt-get install apache2 -y &>/dev/null
- sed -i "s;Listen 80;Listen 81;g" /etc/apache2/ports.conf
  service apache2 restart > /dev/null 2>&1 &
 }
 
-declare -A idioma=( [1]="en English" )
+declare -A idioma=( [1]="id Indonesia" )
 selection=1
 pv="$(echo ${idioma[$selection]}|cut -d' ' -f1)"
 echo "${SCPdir}/menu" > /usr/bin/menu && chmod +x /usr/bin/menu
