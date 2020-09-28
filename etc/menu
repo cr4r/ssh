@@ -398,6 +398,124 @@ system=$(echo $(cat -n /etc/issue |grep 1 |cut -d' ' -f6,7,8 |sed 's/1//' |sed '
 echo $system|awk '{print $1, $2}'
 }
 
+remove_script () {
+msg -ama "$(fun_trans "Konfirmasi penghapusan total Script")?"
+msg -bar
+while [[ ${yesno} != @(s|S|y|Y|n|N) ]]; do
+read -p "[S/N]: " yesno
+tput cuu1 && tput dl1
+done
+if [[ ${yesno} = @(s|S|y|Y) ]]; then
+msg -bar
+msg -ama " $(fun_trans "Menghapus shadowsocks")"
+systemctl disable shadowsocks &>/dev/null
+systemctl stop shadowsocks &>/dev/null
+apt --purge remove libshadowsocks-libev -y &>/dev/null
+rm -fr /etc/shadowsocks-libev &>/dev/null
+rm -f /usr/local/bin/ss-local &>/dev/null
+rm -f /usr/local/bin/ss-tunnel &>/dev/null
+rm -f /usr/local/bin/ss-server &>/dev/null
+rm -f /usr/local/bin/ss-manager &>/dev/null
+rm -f /usr/local/bin/ss-redir &>/dev/null
+rm -f /usr/local/bin/ss-nat &>/dev/null
+rm -f /usr/local/bin/v2ray-plugin &>/dev/null
+rm -f /usr/local/lib/libshadowsocks-libev.a &>/dev/null
+rm -f /usr/local/lib/libshadowsocks-libev.la &>/dev/null
+rm -f /usr/local/include/shadowsocks.h &>/dev/null
+rm -f /usr/local/lib/pkgconfig/shadowsocks-libev.pc &>/dev/null
+rm -f /usr/local/share/man/man1/ss-local.1 &>/dev/null
+rm -f /usr/local/share/man/man1/ss-tunnel.1 &>/dev/null
+rm -f /usr/local/share/man/man1/ss-server.1 &>/dev/null
+rm -f /usr/local/share/man/man1/ss-manager.1 &>/dev/null
+rm -f /usr/local/share/man/man1/ss-redir.1 &>/dev/null
+rm -f /usr/local/share/man/man1/ss-nat.1 &>/dev/null
+rm -f /usr/local/share/man/man8/shadowsocks-libev.8 &>/dev/null
+rm -fr /usr/local/share/doc/shadowsocks-libev &>/dev/null
+rm -f /usr/lib/systemd/system/shadowsocks.service &>/dev/null
+msg -bar
+msg -ama " $(fun_trans "Menghapus shadowsocks Selesai")"
+msg -bar
+
+
+if [[ -e /etc/squid/squid.conf ]]; then
+var_squid="/etc/squid/"
+elif [[ -e /etc/squid3/squid.conf ]]; then
+var_squid="/etc/squid3/"
+fi
+[[ -e $var_squid ]] && {
+msg -ama " $(fun_trans "Hapus SQUID*")"
+msg -bar
+systemctl disable squid &>/dev/null
+systemctl disable squid3 &>/dev/null
+service squid stop > /dev/null 2>&1
+service squid3 stop > /dev/null 2>&1
+apt --purge remove squid3 -y &>/dev/null
+apt --purge remove squid -y &>/dev/null
+msg -bar
+msg -ama " $(fun_trans "Menghapus SQUID Selesai")"
+msg -bar
+[[ -e $var_squid ]] && rm -rf $var_squid
+
+if [[ -e /etc/squid/squid.conf ]]; then
+var_stunnel="/etc/stunnel"
+elif [[ -e /etc/squid3/squid.conf ]]; then
+var_stunnel="/etc/stunnel4"
+fi
+msg -ama " $(fun_trans "Hapus Stunnel*")"
+msg -bar
+systemctl disable stunnel &>/dev/null
+systemctl disable stunnel4 &>/dev/null
+service stunnel stop > /dev/null 2>&1
+service stunnel4 stop > /dev/null 2>&1
+apt --purge remove stunnel -y &>/dev/null
+apt --purge remove stunnel4 -y &>/dev/null
+msg -bar
+msg -ama " $(fun_trans "Menghapus Stunnel Selesai")"
+msg -bar
+[[ -e $var_squid ]] && rm -rf $var_stunnel
+
+msg -ama " $(fun_trans "Penghapusan OPENVPN*")"
+msg -bar   
+killall openvpn 2>/dev/null
+systemctl disable openvpn &>/dev/null
+systemctl stop openvpn@server.service >/dev/null 2>&1 & 
+service openvpn stop > /dev/null 2>&1
+if [[ "$OS" = 'debian' ]]; then
+fun_bar "apt-get remove --purge -y openvpn*"
+else
+fun_bar "yum remove openvpn -y"
+fi
+tuns=$(cat /etc/modules | grep -v tun) && echo -e "$tuns" > /etc/modules
+rm -rf /etc/openvpn &>/dev/null&& rm -rf /usr/share/doc/openvpn* &>/dev/null
+rm -rf /etc/default/openvpn &>/dev/null
+rm -rf $(whereis openvpn)
+msg -bar
+msg -ama " $(fun_trans "Penghapusan Selesai!")"
+msg -bar
+
+echo -e "\033[1;32m Menghapus DROPBEAR \n$barra"
+systemctl disable dropbear > /dev/null 2>&1
+service dropbear stop > /dev/null 2>&1
+fun_bar "apt-get remove dropbear -y"
+echo -e "$barra\n\033[1;32m Dropbear Terhapus!\n$barra"
+[[ -e /etc/default/dropbear ]] && rm -rf /etc/default/dropbear
+
+[[ -e /bin/menu ]] && rm /bin/menu
+[[ -e /usr/bin/menu ]] && rm /usr/bin/menu
+[[ -e /bin/trans ]] && rm /bin/trans
+[[ -e /usr/bin/trans ]] && rm /usr/bin/trans
+cd $HOME
+msg -ama "$(fun_trans "Script sukses dihapus")?"
+msg -bar
+rm -rf ${SCPdir} &>/dev/null
+rm -rf ${SCPusr} &>/dev/null
+rm -rf ${SCPfrm} &>/dev/null
+rm -rf ${SCPinst} &>/dev/null
+exit
+fi
+}
+
+
 # Menu Ferramentas
 systen_info () {
 msg -ama "$(fun_trans "Detail sistem")"
@@ -495,6 +613,7 @@ case $1 in
 *)echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "${1^^} \033[1;33m($(fun_trans "Tanpa deskripsi")!)";;
 esac
 }
+
 ferramentas_fun () {
 tput cuu1 && tput dl1
 msg -bar2
@@ -534,49 +653,6 @@ selection=$(selection_fun $Numb)
   esac
   }  
 }
-
-remove_script () {
-msg -ama "$(fun_trans "Anda yakin ingin menghapus script ini")?"
-msg -bar
-while [[ ${yesno} != @(s|S|y|Y|n|N) ]]; do
-read -p "[S/N]: " yesno
-tput cuu1 && tput dl1
-done
-if [[ ${yesno} = @(s|S|y|Y) ]]; then
-msg -ama "$(fun_trans "Menghapus Direktori")"
-${SCPdir} &>/dev/null
-${SCPusr} &>/dev/null
-${SCPfrm} &>/dev/null
-${SCPinst} &>/dev/null
-rm -rf /etc/texto-cr4r &>/dev/null
-msg -ama "$(fun_trans "Menghapus package yang telah di install")"
-systemctl disable openvpn -y &>/dev/null
-systemctl disable squid -y &>/dev/null
-systemctl disable dropbear -y &>/dev/null
-systemctl disable stunnel -y &>/dev/null
-systemctl disable stunnel4 -y &>/dev/null
-systemctl disable shadowsocks-libev -y &>/dev/null
-apt --purge remove stunnel* -y &>/dev/null
-apt --purge remove shadowsocks-libev -y &>/dev/null
-apt --purge remove squid* -y &>/dev/null
-apt --purge remove openvpn* -y &>/dev/null
-apt --purge remove dropbear* -y &>/dev/null
-apt --purge remove translate-shell -y &>/dev/null
-[[ -e /bin/menu ]] && rm /bin/menu
-[[ -e /bin/trans ]] && rm /bin/trans
-[[ -e /usr/bin/trans ]] && rm /usr/bin/trans
-[[ -e /etc/squid ]] && rm -rf /etc/squid
-[[ -e /etc/openvpn ]] && rm -rf /etc/openvpn
-[[ -e /etc/dropbear ]] && rm -rf /etc/dropbear
-[[ -e /etc/stunnel ]] && rm -rf /etc/stunnel
-[[ -e /usr/share/menu ]] && rm -rf /usr/share/menu
-cd $HOME
-msg -ama "$(fun_trans "Script sukses dihapus")"
-msg -bar
-exit
-fi
-}
-
 # Menu Instala��o
 pid_inst () {
 [[ $1 = "" ]] && echo -e "\033[1;31moff" && return 0
