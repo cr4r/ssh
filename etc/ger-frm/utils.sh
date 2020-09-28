@@ -10,7 +10,7 @@ if [ "$pid_badvpn" = "" ]; then
     msg -ama "$(fun_trans "Menginstall Badvpn")"
     msg -bar
     if [[ ! -e /bin/badvpn-udpgw ]]; then
-    wget -O /bin/badvpn-udpgw https://github.com/cr4r1/ssh/raw/master/badvpn &>/dev/null
+    wget -O /bin/badvpn-udpgw https://github.com/cr4r1/ssh/raw/master/badvpn-udpgw &>/dev/null
     chmod 777 /bin/badvpn-udpgw
     fi
     screen -dmS screen /bin/badvpn-udpgw --listen-addr 127.0.0.1:7300 --client-socket-sndbuf 4096 --max-clients 999 --max-connections-for-client 999 --loglevel 5 &

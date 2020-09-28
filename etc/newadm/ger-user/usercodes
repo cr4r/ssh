@@ -28,10 +28,11 @@ $(cat /etc/openvpn/client-key.pem)
 $(cat /etc/openvpn/client-cert.pem)
 </cert>
 <ca>
-$(cat /etc/openvpn/ca.pem)
+$(cat /etc/openvpn/ca.pem)1
+
 </ca>
 <tls-auth>
-$(cat /etc/openvpn/ca.pem)
+$(cat /etc/openvpn/ta.key)
 </tls-auth>" >> $HOME/$1.ovpn
   while [[ ${ovpnauth} != @(s|S|y|Y|n|N) ]]; do
     read -p "$(fun_trans "Masukkan Otentikasi Pengguna di File")? [S/N]: " -e -i S ovpnauth

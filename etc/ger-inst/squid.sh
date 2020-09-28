@@ -71,7 +71,7 @@ msg -bar
 msg -ama  "|1| $(fun_trans "Umum")"
 msg -ama  "|2| $(fun_trans "Advanced") -\033[1;31m $(fun_trans "Configurasi versi Advanced")\033[1;37m"
 msg -bar
-read -p "[1/2]: " -e -i 1 proxy_opt
+read -p "[1/2]: " -e proxy_opt
 tput cuu1 && tput dl1
 if [[ $proxy_opt = 1 ]]; then
 msg -ama  " $(fun_trans "Konfigurasi umum untuk SQUID")"

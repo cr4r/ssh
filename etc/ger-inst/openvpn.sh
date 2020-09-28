@@ -201,7 +201,20 @@ done
 esac
 echo 01 > /etc/openvpn/ca.srl
 while [[ ! -e /etc/openvpn/dh.pem || -z $(cat /etc/openvpn/dh.pem) ]]; do
-openssl dhparam -out /etc/openvpn/dh.pem 4096 &>/dev/null
+echo """-----BEGIN DH PARAMETERS-----
+MIICCAKCAgEA2l9FRgeStyDVtEWPv+W4DowNFnSWG9QeVHa3daocKl13UeI9cCT/
+ubXaH42J2YvmNNpICg/o4j9hHa3O1mrtTogdYbGtx3HN61kPIdpeo0Lc9Tq4oigX
+gqGdoye6pUXkvwquaCriLaILKgHL3pg7qaHAh7XxLjeSi8M59qxtDDqeKgK/rLgc
+7wWVE2TfV1F38x8+gAho4l08oEtdVCQOITOf3I+GimXWcF8yHw9dpnwdtcX9RHGz
+UdjRmRygAU6db7I4edFtmoe6fKlktnwb5ERmbvAeZnXZqAKy8V66PuQjQTza8uzU
+CkldaoEnjwxk4o/KqgoiCI6SKBz3cnbbNBHDLZd1yz/EhCDU8Ol+kPjVNRcInsEa
+ZnnbRsugPaj9qw5i7116EB9sdO+U5YZz1YfpL162nDh1bTVzLTvOZ3DDL3xxHfH0
+cxqG2rZOF3mBM9zy0iJNcW76C1ZQSoNpPft50afuiiqruw0H7gKj6Vm5cg1fN8rO
+BQXKD2t28tYjO4i24kJZAWMWstIkrXL6MCz/DjiEdvo/Jy0GCYC21LGbfr3a8hyC
+U2j7aA1nypl94UulAjBUQbDtcm86FoX5y9fFT15elH4wZXGMgjM69LSkbmyAIPoY
+SrcFe2DENO1cio/cpABv1CCpB1XSO9KsUXrTSuqJPXzQDhCzwuuTC1sCAQI=
+-----END DH PARAMETERS-----""">/etc/openvpn/dh.pem
+#openssl dhparam -out /etc/openvpn/dh.pem 4096 &>/dev/null
 done
 while [[ ! -e /etc/openvpn/ca-key.pem || -z $(cat /etc/openvpn/ca-key.pem) ]]; do
 openssl genrsa -out /etc/openvpn/ca-key.pem 4096 &>/dev/null

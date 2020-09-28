@@ -30,7 +30,7 @@ return 0
 msg -azu " $(fun_trans "SSL Stunnel")"
 msg -bar
 msg -ama " $(fun_trans "Pilih Port Pengalihan Internal")"
-msg -ama " $(fun_trans "Artinya, Port di Server Anda untuk SSL\(ex\:22)")"
+msg -ama " $(fun_trans "Artinya, Port di Server Anda untuk SSL(ex:22)")"
 msg -bar
          while true; do
          read -p " Local-Port: " portx
@@ -40,7 +40,7 @@ msg -bar
          done
 msg -bar
 DPORT="$(mportas|grep $portx|awk '{print $2}'|head -1)"
-msg -ama " $(fun_trans "Sekarang kita perlu tahu port mana yang akan didengarkan SSL (ex:443)")"
+msg -ama " $(fun_trans "Sekarang kita perlu tahu port mana\nyang akan didengarkan SSL (ex:443)")"
 msg -bar
     while true; do
     read -p " Listen-SSL: " SSLPORT
