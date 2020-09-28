@@ -213,6 +213,9 @@ done
 while [[ ! -e /etc/openvpn/ca.pem || -z $(cat /etc/openvpn/ca.pem) ]]; do
 openssl x509 -req -in /etc/openvpn/ca-csr.pem -out /etc/openvpn/ca.pem -signkey /etc/openvpn/ca-key.pem -days 365 &>/dev/null
 done
+while [[ ! -e /etc/openvpn/ta.key || -z $(cat /etc/openvpn/ta.key) ]]; do
+openvpn --genkey --secret /etc/openvpn/ta.key
+done
 
 cat > /etc/openvpn/server.conf <<EOF
 server 10.8.0.0 255.255.255.0
@@ -252,7 +255,7 @@ plugin $PLUGIN login" >> /etc/openvpn/server.conf
 echo -ne " \033[1;31m[ ! ] Generating CA Config" # Generate CA Config
 (
 while [[ ! -e /etc/openvpn/client-key.pem || -z $(cat /etc/openvpn/client-key.pem) ]]; do
-openssl genrsa -out /etc/openvpn/client-key.pem 2048 &>/dev/null
+openssl genrsa -out /etc/openvpn/client-key.pem 4096 &>/dev/null
 done
 chmod 600 /etc/openvpn/client-key.pem
 while [[ ! -e /etc/openvpn/client-csr.pem || -z $(cat /etc/openvpn/client-csr.pem) ]]; do

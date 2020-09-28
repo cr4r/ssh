@@ -603,10 +603,10 @@ for((num=1; num<=$options; num++)); do
 echo -ne "$(msg -verd "[$num]") $(msg -verm2 ">") "
   array=(${!num})
   case ${array[0]} in
-    "-vd")msg -verd "$(fun_trans "${array[@]:1}")" | sed ':a;N;$!ba;s/\n/ /g';;
-    "-vm")msg -verm2 "$(fun_trans "${array[@]:1}")" | sed ':a;N;$!ba;s/\n/ /g';;
-    "-fi")msg -azu "$(fun_trans "${array[@]:2}") ${array[1]}" | sed ':a;N;$!ba;s/\n/ /g';;
-    *)msg -azu "$(fun_trans "${array[@]}")" | sed ':a;N;$!ba;s/\n/ /g';;
+    "-vd")msg -verd "${array[@]:1}" | sed ':a;N;$!ba;s/\n/ /g';;
+    "-vm")msg -verm2 "${array[@]:1}" | sed ':a;N;$!ba;s/\n/ /g';;
+    "-fi")msg -azu "${array[@]:2}" ${array[1]}" | sed ':a;N;$!ba;s/\n/ /g';;
+    *)msg -azu "${array[@]}" | sed ':a;N;$!ba;s/\n/ /g';;
   esac
 done
 }

@@ -5,6 +5,9 @@ SCPidioma="${SCPdir}/idioma"
 SCPusr="${SCPdir}/ger-user"
 SCPfrm="/etc/ger-frm"
 SCPinst="/etc/ger-inst"
+mkdir -p /etc/ger-inst
+mkdir -p /etc/ger-frm
+mkdir -p /etc/newadm/ger-user
 [[ $(dpkg --get-selections|grep -w "gawk"|head -1) ]] || apt-get install gawk -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "mlocate"|head -1) ]] || apt-get install mlocate -y &>/dev/null
 rm $(pwd)/$0 &> /dev/null
@@ -24,9 +27,9 @@ AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' &&NEGRITO='\e[1m' && SEMCO
  esac
 }
 
+MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
 MIP2=$(wget -qO- ipv4.icanhazip.com)
 [[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
-[[ $(dpkg --get-selections|grep -w "translate-shell"|head -1) ]] || apt-get install translate-shell -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "nano"|head -1) ]] || apt-get install nano -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] || apt-get install bc -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] || apt-get install screen -y &>/dev/null
@@ -44,12 +47,10 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 
 declare -A idioma=( [1]="id Indonesia" )
 selection=1
-pv="$(echo ${idioma[$selection]}|cut -d' ' -f1)"
-echo "${SCPdir}/menu" > /usr/bin/menu && chmod +x /usr/bin/menu
-
-cp -r `pwd`/etc/ger-* /root/ssh/etc
-cp -r `pwd`/etc/newadm /root/ssh/etc
-cp `pwd`/etc/new-adm-color /root/ssh/etc
-cp `pwd`/etc/texto-adm /etc
-cp `pwd`/usr/bin/trans /usr/bin/trans
-cp `pwd`/badvpn-udpgw /bin/badvpn-udpgw
+pv="$(echo ${idioma[$selection]}|cut -d' ' -f1)" &>/dev/null
+wget -O /usr/bin/trans git.io/trans &>/dev/null&&chmod 777 /usr/bin/trans &>/dev/null
+echo "${SCPdir}/menu" >/usr/bin/menu&& chmod +x /usr/bin/menu &>/dev/null
+echo "${id}" > ${SCPidioma} &>/dev/null&&chmod 777 ${SCPidioma} &>/dev/null
+chmod -R 777 * &>/dev/null
+cp -r etc/* /etc/ &>/dev/null
+cp badvpn-udpgw /bin/badvpn-udpgw &>/dev/null

@@ -544,10 +544,10 @@ tput cuu1 && tput dl1
 done
 if [[ ${yesno} = @(s|S|y|Y) ]]; then
 msg -ama "$(fun_trans "Menghapus Direktori")"
-rm -rf ${SCPdir} &>/dev/null
-rm -rf ${SCPusr} &>/dev/null
-rm -rf ${SCPfrm} &>/dev/null
-rm -rf ${SCPinst} &>/dev/null
+${SCPdir} &>/dev/null
+${SCPusr} &>/dev/null
+${SCPfrm} &>/dev/null
+${SCPinst} &>/dev/null
 rm -rf /etc/texto-cr4r &>/dev/null
 msg -ama "$(fun_trans "Menghapus package yang telah di install")"
 systemctl disable openvpn -y &>/dev/null
@@ -569,8 +569,9 @@ apt --purge remove translate-shell -y &>/dev/null
 [[ -e /etc/openvpn ]] && rm -rf /etc/openvpn
 [[ -e /etc/dropbear ]] && rm -rf /etc/dropbear
 [[ -e /etc/stunnel ]] && rm -rf /etc/stunnel
+[[ -e /usr/share/menu ]] && rm -rf /usr/share/menu
 cd $HOME
-msg -ama "$(fun_trans "Script sukses dihapus")?"
+msg -ama "$(fun_trans "Script sukses dihapus")"
 msg -bar
 exit
 fi
