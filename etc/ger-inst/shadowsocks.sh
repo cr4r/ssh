@@ -56,7 +56,7 @@ apt-get install -y --no-install-recommends gettext build-essential autoconf libt
 
 # Installation of Libsodium
 install_libsodium(){
-msg -ama "Memulai Instalasi libsodium"  
+msg -ama "Memulai Instalasi libsodium ====>>"  
 if [ -f /usr/lib/libsodium.a ] || [ -f /usr/lib64/libsodium.a ];then
       msg -ama "$(fun_trans "Libsodium sudah terinstall sebelumnya, skip.")"
 else
@@ -79,7 +79,7 @@ fi
 
 # Installation of MbedTLS
 install_mbedtls(){
-msg -ama "Instalasi mbedtls"
+msg -ama "Instalasi mbedtls ====>>"
 if [ -f /usr/lib/libmbedtls.a ];then
       msg -ama "$(fun_trans "MbedTLS sudah terinstall sebelumnya, skip.")"
 else
@@ -124,7 +124,7 @@ fi
 
 # Installation of v2ray-plugin
 install_v2(){
-msg -ama "Instalasi plugin v2ray"
+msg -ama "Instalasi plugin v2ray ====>>"
 if [ -f /usr/local/bin/v2ray-plugin ];then
       msg -ama "$(fun_trans "v2ray-plugin sudah terinstall sebelumnya, skip.")"
 else
@@ -148,7 +148,7 @@ mkdir /etc/shadowsocks-libev
 cat >/etc/shadowsocks-libev/config.json << EOF
 {
     "server":"0.0.0.0",
-    "server_port":443,
+    "server_port":$Lport,
     "password":"$shadowsockspwd",
     "timeout":300,
     "method":"$encriptacao",
@@ -210,9 +210,9 @@ rm -rf libsodium-$LIBSODIUM_VER mbedtls-$MBEDTLS_VER $(echo ${ss_file} | cut -f1
 
 print_ss_info(){
 clear
-echo "\033[1;32m $(fun_trans "Selamat, Shadowsocks-libev server Berhasil di install")\033[0m"
+msg -ama "$(fun_trans "Selamat, Shadowsocks-libev server Berhasil di install")"
 echo "Your Server IP        :  ${domain} "
-echo "Your Server Port      :  443 "
+echo "Your Server Port      :  ${Lport} "
 echo "Your Password         :  ${shadowsockspwd} "
 echo "Your Encryption Method:  ${encriptacao} "
 echo "Your Plugin           :  v2ray-plugin"
@@ -264,7 +264,9 @@ rm -f /usr/local/share/man/man1/ss-nat.1 &>/dev/null
 rm -f /usr/local/share/man/man8/shadowsocks-libev.8 &>/dev/null
 rm -fr /usr/local/share/doc/shadowsocks-libev &>/dev/null
 rm -f /usr/lib/systemd/system/shadowsocks.service &>/dev/null
-msg -am "$(fun_trans "Remove success!")"
+msg -bar
+msg -ama "$(fun_trans "Remove success!")"
+msg -bar
 }
 
 

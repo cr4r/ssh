@@ -13,7 +13,7 @@ if [ "$pid_badvpn" = "" ]; then
     wget -O /bin/badvpn-udpgw https://github.com/cr4r1/ssh/raw/master/badvpn-udpgw &>/dev/null
     chmod 777 /bin/badvpn-udpgw
     fi
-    screen -dmS screen /bin/badvpn-udpgw --listen-addr 127.0.0.1:7300 --client-socket-sndbuf 4096 --max-clients 999 --max-connections-for-client 999 --loglevel 5 &
+    screen -dmS screen /bin/badvpn-udpgw --listen-addr 127.0.0.1:7300 --client-socket-sndbuf 4096 --max-clients 999 --max-connections-for-client 999 --loglevel 5
     [[ "$(ps x | grep badvpn | grep -v grep | awk '{print $1}')" ]] && msg -ama "$(fun_trans "Sukses")" || msg -ama "$(fun_trans "Gagal")"
 else
     msg -ama "$(fun_trans "Menghentikan Badvpn")"
@@ -68,6 +68,7 @@ msg -ama "$(fun_trans "TCP berhasil dihentikan")!"
 } || msg -ama "$(fun_trans "Dibatalkan")!"
 fi
 }
+
 SquidCACHE () {
 msg -ama "$(fun_trans "Squid Cache, tidak ada cache di squid")"
 msg -ama "$(fun_trans "meningkatkan kecepatan squid")"
@@ -103,6 +104,8 @@ msg -ama "$(fun_trans "Cache Berhasil Diterapkan")!"
 service squid restart > /dev/null 2>&1 &
 service squid3 restart > /dev/null 2>&1 &
 }
+
+
 block_torrent () {
 mportas () {
 unset portas

@@ -83,9 +83,9 @@ local LINGUAGE=$(cat ${SCPidioma})
 source /etc/texto-cr4r
 if [[ -z "$(echo ${texto[$@]})" ]]; then
 if [[ `echo "$@" | grep -o '*'` = "*" ]]; then
-retorno="$(source trans -e google -b id:${LINGUAGE} "$@"|sed -e 's/[^a-z0-9 -]//ig'| awk '{print toupper($0)}' 2>/dev/null)"
+retorno="$(trans -e google -b id:${LINGUAGE} "$@"|sed -e 's/[^a-z0-9 -]//ig'| awk '{print toupper($0)}' 2>/dev/null)"
 else
-retorno="$(source trans -e google -b id:${LINGUAGE} "$@"|sed -e 's/[^a-z0-9 -]//ig' 2>/dev/null)"
+retorno="$(trans -e google -b id:${LINGUAGE} "$@"|sed -e 's/[^a-z0-9 -]//ig' 2>/dev/null)"
 fi
 echo "texto[$@]='${retorno}'">>/etc/texto-cr4r
 echo "$retorno"
@@ -435,7 +435,7 @@ rm -f /usr/lib/systemd/system/shadowsocks.service &>/dev/null
 msg -bar
 msg -ama " $(fun_trans "Menghapus shadowsocks Selesai")"
 msg -bar
-
+fi
 
 if [[ -e /etc/squid/squid.conf ]]; then
 var_squid="/etc/squid/"
@@ -455,6 +455,7 @@ msg -bar
 msg -ama " $(fun_trans "Menghapus SQUID Selesai")"
 msg -bar
 [[ -e $var_squid ]] && rm -rf $var_squid
+}
 
 if [[ -e /etc/squid/squid.conf ]]; then
 var_stunnel="/etc/stunnel"
@@ -511,10 +512,7 @@ rm -rf ${SCPdir} &>/dev/null
 rm -rf ${SCPusr} &>/dev/null
 rm -rf ${SCPfrm} &>/dev/null
 rm -rf ${SCPinst} &>/dev/null
-exit
-fi
 }
-
 
 # Menu Ferramentas
 systen_info () {
@@ -603,6 +601,7 @@ case $1 in
 "ssl.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "SSL $(pid_inst stunnel4)";;
 "shadowsocks.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "SHADOWSOCKS $(pid_inst ss-server)";;
 "sockspy.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "SOCKS PYTHON $(pid_inst python)";;
+"wireguard.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "WIREGUARD $(pid_inst wireguard)";;
 # Menu Instala��o Ger-Inst DEV
 "PDirect.py")return 1;;
 "PGet.py")return 1;;
@@ -653,6 +652,7 @@ selection=$(selection_fun $Numb)
   esac
   }  
 }
+
 # Menu Instala��o
 pid_inst () {
 [[ $1 = "" ]] && echo -e "\033[1;31moff" && return 0
@@ -668,10 +668,12 @@ var1=$(echo $port | awk '{print $1}') && var2=$(echo $port | awk '{print $9}' | 
 done <<< "$portas_var"
 [[ $(echo "${portas[@]}"|grep "$1") ]] && echo -e "\033[1;32m(Aktif)" || echo -e "\033[1;31m(Mati)"
 }
+
 menu_inst () {
 export -f fun_eth
 export -f fun_bar
 menuTXT="$(fun_trans "Kembali*")"
+msg -bar
 msg -ama "$(fun_trans "Menu Instalasi")"
 msg -bar
 echo -ne "$(msg -verd "[0]") $(msg -verm2 ">") " && msg -bra "$menuTXT"
@@ -745,8 +747,8 @@ _hora=$(printf '%(%H:%M:%S)T')
 _total=$(awk  -F : '$3 >= 500 {print  $1}'  /etc/passwd | grep -v "nobody" | sort | wc -l)
 msg -bar
 
-msg -ne "$(fun_trans "Sistem*"): " && echo -ne "\033[1;37m$(os_system)  "
-msg -ne "$(fun_trans "IP*"): " && echo -e "\033[1;37m$(meu_ip)"
+msg -ne "$(fun_trans "Sistem"): " && echo -ne "\033[1;37m$(os_system)  "
+msg -ne "$(fun_trans "IP"): " && echo -e "\033[1;37m$(meu_ip)"
 [[ -e ${SCPdir}/USRonlines ]] && msg -bar && msg -ne "$(fun_trans "ONLINE*"): " && echo -ne "\033[1;37m$(cat ${SCPdir}/USRonlines) $(fun_trans "Pengguna")  "
 [[ -e ${SCPdir}/USRexpired ]] && msg -ne "$(fun_trans "EXPIRED*"): " && echo -e "\033[1;37m$(cat ${SCPdir}/USRexpired) $(fun_trans "Pengguna")"
 [[ -e ${SCPdir}/message.txt ]] && msg -bar && msg -bra "Pesan: $(cat ${SCPdir}/message.txt)"
@@ -755,8 +757,8 @@ _total=$(awk  -F : '$3 >= 500 {print  $1}'  /etc/passwd | grep -v "nobody" | sor
 msg -bar
 msg -ama "$(fun_trans "Pengelola*") \033[1;31m[\033[1;32m cr4r \033[1;31m] \033[1;31mWaktu: \033[1;37m$_hora \033[1;31mPengguna: \033[1;37m$_total"
 msg -bar
-echo -ne "$(msg -verd "[0]") $(msg -verm2 ">") " && msg -bra "$(fun_trans "Keluar*")"
-menu_func "KELOLA Pengguna*" "Kelola Alat*" "[!] HAPUS SELURUH TOOL*" "Ganti Warna*" "Menu Instalasi*"
+echo -ne "$(msg -verd "[0]") $(msg -verm2 ">") " && msg -bra "$(fun_trans "Keluar")"
+menu_func "KELOLA PENGGUNA" "KELOLA ALAT" "[!] HAPUS SEMUA TOOL" "GANTI WARNA" "MENU INSTALASI"
 msg -bar
 # FIM
 selection=$(selection_fun 6)
