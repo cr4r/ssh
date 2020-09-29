@@ -10,4 +10,10 @@ Buat berbagai VPN untuk VPS antara lain
 <br>[8] > WIREGUARD
 <br><br>
 <center> Fitur </center>
-<br>dd
+<br>[1] FTP
+<br>[2] Proxy Manajer
+<br>[3] Speedtest
+<br>[4] Cek System VPS
+<br>[5] Subdomain Scanner
+<br>[6] BADVPN/TCPSpeed/SquidCache/No Torrent
+<br>==== Comming Soon ====
