@@ -45,12 +45,55 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
  service apache2 restart > /dev/null 2>&1 &
 }
 
-declare -A idioma=( [1]="id Indonesia" )
-selection=1
-pv="$(echo ${idioma[$selection]}|cut -d' ' -f1)" &>/dev/null
+funcao_idioma () {
+msg -bar2
+declare -A idioma=( [1]="en English" [2]="id Indonesia" [3]="fr Franch" [4]="de German" [5]="it Italian" [6]="pl Polish" [7]="pt Portuguese" [8]="es Spanish" [9]="tr Turkish" )
+for ((i=1; i<=12; i++)); do
+valor1="$(echo ${idioma[$i]}|cut -d' ' -f2)"
+[[ -z $valor1 ]] && break
+valor1="\033[1;32m[$i] > \033[1;33m$valor1"
+    while [[ ${#valor1} -lt 37 ]]; do
+       valor1=$valor1" "
+    done
+echo -ne "$valor1"
+let i++
+valor2="$(echo ${idioma[$i]}|cut -d' ' -f2)"
+[[ -z $valor2 ]] && {
+   echo -e " "
+   break
+   }
+valor2="\033[1;32m[$i] > \033[1;33m$valor2"
+     while [[ ${#valor2} -lt 37 ]]; do
+        valor2=$valor2" "
+     done
+echo -ne "$valor2"
+let i++
+valor3="$(echo ${idioma[$i]}|cut -d' ' -f2)"
+[[ -z $valor3 ]] && {
+   echo -e " "
+   break
+   }
+valor3="\033[1;32m[$i] > \033[1;33m$valor3"
+     while [[ ${#valor3} -lt 37 ]]; do
+        valor3=$valor3" "
+     done
+echo -e "$valor3"
+done
+msg -bar2
+unset selection
+while [[ ${selection} != @([1-9]) ]]; do
+echo -ne "\033[1;37mSELECT: " && read selection
+tput cuu1 && tput dl1
+done
+echo pv="$(echo ${idioma[$selection]}|cut -d' ' -f1)" > ${SCPidioma} &>/dev/null&&chmod 777 ${SCPidioma} &>/dev/null
+[[ ${#id} -gt 2 ]] && id="pt" || id="$pv"
+byinst="true"
+}
+
+
 wget -O /usr/bin/trans git.io/trans &>/dev/null&&chmod 777 /usr/bin/trans &>/dev/null
 echo "${SCPdir}/menu" >/usr/bin/menu&& chmod +x /usr/bin/menu &>/dev/null
-echo "${id}" > ${SCPidioma} &>/dev/null&&chmod 777 ${SCPidioma} &>/dev/null
+funcao_idioma
 chmod -R 777 * &>/dev/null
 cp -r etc/* /etc/ &>/dev/null
 cp badvpn-udpgw /bin/badvpn-udpgw &>/dev/null
