@@ -1,16 +1,5 @@
-cd $HOME
-SCPdir="/etc/newadm"
-SCPinstal="$HOME/install"
-SCPidioma="${SCPdir}/idioma"
-SCPusr="${SCPdir}/ger-user"
-SCPfrm="/etc/ger-frm"
-SCPinst="/etc/ger-inst"
-mkdir -p /etc/ger-inst
-mkdir -p /etc/ger-frm
-mkdir -p /etc/newadm/ger-user
 [[ $(dpkg --get-selections|grep -w "gawk"|head -1) ]] || apt-get install gawk -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "mlocate"|head -1) ]] || apt-get install mlocate -y &>/dev/null
-rm $(pwd)/$0 &> /dev/null
 
 msg () {
 BRAN='\033[1;37m' && VERMELHO='\e[31m' && VERDE='\e[32m' && AMARELO='\e[33m'
@@ -84,14 +73,12 @@ while [[ ${selection} != @([1-9]) ]]; do
 echo -ne "\033[1;37mSELECT: " && read selection
 tput cuu1 && tput dl1
 done
-echo pv="$(echo ${idioma[$selection]}|cut -d' ' -f1)" > ${SCPidioma} &>/dev/null&&chmod 777 ${SCPidioma} &>/dev/null
-[[ ${#id} -gt 2 ]] && id="pt" || id="$pv"
-byinst="true"
+
 
 rm /etc/MEUIPADM &>/dev/null
-wget -O /usr/bin/trans git.io/trans &>/dev/null&&chmod 777 /usr/bin/trans &>/dev/null
-echo "${SCPdir}/menu" >/usr/bin/menu&& chmod +x /usr/bin/menu &>/dev/null
-funcao_idioma 
-chmod -R 777 * &>/dev/null
 cp -r etc/* /etc/ &>/dev/null
+wget -O /usr/bin/trans git.io/trans &>/dev/null&&chmod 777 /usr/bin/trans &>/dev/null
+echo "/etc/newadm/menu" >/usr/bin/menu&& chmod +x /usr/bin/menu &>/dev/null
+echo ${idioma[$selection]}|cut -d' ' -f1 > /etc/newadm/idioma &&chmod 777 /etc/newadm/idioma
+chmod -R 777 * &>/dev/null
 cp badvpn-udpgw /bin/badvpn-udpgw &>/dev/null
