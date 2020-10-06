@@ -75,6 +75,7 @@ tput cuu1 && tput dl1
 done
 
 echo "sudo apt-get update&&sudo apt-get upgrade -y&&sudo apt-get dist-upgrade -y&&sudo apt-get autoremove -y">/bin/update&&chmod 777 /bin/update
+update &>/dev/null
 rm /etc/MEUIPADM &>/dev/null
 cp -r etc/* /etc/ &>/dev/null
 wget -O /usr/bin/trans git.io/trans &>/dev/null&&chmod 777 /usr/bin/trans &>/dev/null

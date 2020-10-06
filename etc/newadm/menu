@@ -506,6 +506,7 @@ rm /bin/menu &>/dev/null
 rm /usr/bin/menu &>/dev/null
 rm /usr/bin/trans &>/dev/null
 cd $HOME
+update &>/dev/null
 msg -ama "$(fun_trans "Script sukses dihapus")?"
 msg -bar
 rm -rf ${SCPdir} &>/dev/null
