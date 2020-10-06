@@ -674,7 +674,6 @@ menu_inst () {
 export -f fun_eth
 export -f fun_bar
 menuTXT="$(fun_trans "Kembali*")"
-msg -bar
 msg -ama "$(fun_trans "Menu Instalasi")"
 msg -bar
 echo -ne "$(msg -verd "[0]") $(msg -verm2 ">") " && msg -bra "$menuTXT"
