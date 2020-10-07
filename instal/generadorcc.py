@@ -14,31 +14,31 @@ def usage():
     print("generadorcc.py version:{}".format(version))
     print("")
     print("\033[1;31m               +------------------------------+")
-    print("               +\033[1;32m     GENERADOR DE BIN RS      \033[1;31m+")
+    print("               +\033[1;32m     Generator BIN      \033[1;31m+")
     print("               +------------------------------+")
     print("")
     print("+---------------+")
-    print("+\033[1;32m Metodo de uso\033[1;31m +")
+    print("+\033[1;32m Cara penggunaan\033[1;31m +")
     print("+---------------+")
     print("")
-    print("\033[1;36m     python2 generadorcc.py -b     [Opciones de uso]")
-    print("     python2 generadorcc.py -h     Mensaje de ayuda")
+    print("\033[1;36m     python2 generadorcc.py -b     [Option]")
+    print("     python2 generadorcc.py -h     Untuk Bantuan")
     print("\033[1;31m")
     print("+-----------------+")
-    print("+\033[;32m Opciones de uso\033[1;31m +")
+    print("+\033[;32m Opsi Penggunaan\033[1;31m +")
     print("+-----------------+")
     print("")
-    print("\033[1;36m     -b, -bin          Formato de bin")
-    print("     -u, -cantidad     Cantidad de tarjetas a generar")
-    print("     -c, -ccv          Genera ccv al azar")
-    print("     -d, -date         Genera fechas al azar")
-    print("     -g, -guardar      Guarda las tarjetas en un archivo")
+    print("\033[1;36m     -b, -bin          Format")
+    print("     -u, -cantidad     Jumlah bin dihasilkan")
+    print("     -c, -ccv          Filter ccv")
+    print("     -d, -date         Filter date")
+    print("     -g, -guardar      Simpan ke file")
     print("\033[1;31m")
     print("+----------------+")
-    print("+\033[;32m Ejemplo de uso\033[1;31m +")
+    print("+\033[;32mContoh Penggunaan\033[1;31m +")
     print("+----------------+")
     print("")
-    print("\033[1;33m     CANTIDAD\033[0m")
+    print("\033[1;33m     Contoh\033[0m")
     print("")
     print("\033[1;36m     python2 generadorcc.py -b 123456xxxxxxxxxx -u 40 -d -c ")
     print("")
@@ -78,7 +78,7 @@ def parseOptions(argv):
 
 #CHECKER BASADO EN ALGORITMO LUHN
 def cardLuhnChecksumIsValid(card_number):
-    """ checks to make sure that the card passes a luhn mod-10 checksum """
+    """ Check kartu luhn mod-10 checksum """
 
     sum = 0
     num_digits = len(card_number)
@@ -109,7 +109,7 @@ def ccgen(bin_format):
                 out_cc = out_cc + str(randint(0,9))
             else:
                 print("\ERROR: {}\n".format(bin_format))
-                print("ERROR: bin 16 digitos\n")
+                print("ERROR: bin 16 digit\n")
                 sys.exit()
 
         #Generate checksum (last digit) -- IMPLICIT CHECK
@@ -125,7 +125,7 @@ def ccgen(bin_format):
 
     else:
         print("\033[1;32m")
-        print("ERROR: bin 16 digitos\n")
+        print("ERROR: bin 16 digit\n")
         sys.exit()
 
     return(out_cc)
@@ -183,7 +183,7 @@ def main(argv):
                 print(bin_list[i])
 
         if not bin_list:
-            print("\nERROR: no valid bin\n")
+            print("\nERROR: bin tidak valid\n")
         else:
             print("\nSUCESS: generated ")
         if saveopt:
