@@ -29,7 +29,7 @@ sleep 1s
 }
 
 GENERADOR_BIN () {
-wget -O /etc/ger-frm/GENERADOR_BIN.sh https://github.com/cr4r1/ssh/raw/master/install/GENERADOR_BIN.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/GENERADOR_BIN.sh
+wget -O /etc/ger-frm/GENERADOR_BIN.sh https://github.com/cr4r1/ssh/raw/master/instal/GENERADOR_BIN.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/GENERADOR_BIN.sh
 fun_bar "chmod -R 777 /etc/ger-frm/GENERADOR_BIN.sh"
 chmod -R 777 /etc/ger-frm/GENERADOR_BIN.sh > /dev/null 2>&1
 msg -bar
@@ -38,7 +38,7 @@ return
 }
 
 MasterBin () {
-wget -O /etc/ger-frm/MasterBin.sh https://github.com/cr4r1/ssh/raw/master/install/MasterBin.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/MasterBin.sh
+wget -O /etc/ger-frm/MasterBin.sh https://raw.githubusercontent.com/cr4r1/ssh/master/instal/MasterBin.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/MasterBin.sh
 fun_bar "chmod -R 777 /etc/ger-frm/MasterBin.sh"
 chmod -R 777 /etc/ger-frm/MasterBin.sh > /dev/null 2>&1
 msg -bar
@@ -47,7 +47,7 @@ return
 }
 
 real-host () {
-wget -O /etc/ger-frm/real-host.sh https://github.com/cr4r1/ssh/raw/master/install/real-host.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/real-host.sh
+wget -O /etc/ger-frm/real-host.sh https://raw.githubusercontent.com/cr4r1/ssh/master/instal/real-host.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/real-host.sh
 fun_bar "chmod -R 777 /etc/ger-frm/real-host.sh"
 chmod -R 777 /etc/ger-frm/real-host.sh > /dev/null 2>&1
 msg -bar
@@ -56,7 +56,7 @@ return
 }
 
 dados () {
-wget -O /etc/ger-frm/dados.sh https://raw.githubusercontent.com/cr4r1/ssh/master/install/dados.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/dados.sh
+wget -O /etc/ger-frm/dados.sh https://raw.githubusercontent.com/cr4r1/ssh/master/instal/dados.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/dados.sh
 fun_bar "chmod -R 777 /etc/ger-frm/dados.sh"
 chmod -R 777 /etc/ger-frm/dados.sh > /dev/null 2>&1
 msg -bar
@@ -64,17 +64,8 @@ msg -ama "Sukses Mendownload di: ${cor[2]}Menu alat"
 return
 }
 
-Crear-Demo () {
-wget -O /etc/ger-frm/Crear-Demo.sh https://raw.githubusercontent.com/cr4r1/ssh/master/install/Crear-Demo.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/Crear-Demo.sh
-fun_bar "chmod -R 777 /etc/ger-frm/Crear-Demo.sh"
-chmod -R 777 /etc/ger-frm/Crear-Demo.sh > /dev/null 2>&1
-msg -bar
-msg -ama "Sukses Mendownload di: ${cor[2]}Menu alat"
-return
-}
-
 squidpass () {
-wget -O /etc/ger-frm/squidpass.sh https://raw.githubusercontent.com/cr4r1/ssh/master/install/squidpass.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/squidpass.sh
+wget -O /etc/ger-frm/squidpass.sh https://raw.githubusercontent.com/cr4r1/ssh/master/instal/squidpass.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/squidpass.sh
 fun_bar "chmod -R 777 /etc/ger-frm/squidpass.sh"
 chmod -R 777 /etc/ger-frm/squidpass.sh > /dev/null 2>&1
 msg -bar

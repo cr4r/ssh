@@ -30,9 +30,9 @@ fi
 }
 net_meter () {
 net_dir="/etc/usr_cnx"
-usr_text="$(fun_trans "USUÁRIOS")"
-datos_text="$(fun_trans "USO APROXIMADO")"
-porcen_text="$(fun_trans "CONSUMO TOTAL")"
+usr_text="$(fun_trans "Pengguna")"
+datos_text="$(fun_trans "Perkiraan Penggunaan")"
+porcen_text="$(fun_trans "Konsumsi total")"
 net_cent="/tmp/porcentagem"
 sed -i '/^$/d' $net_dir
  [[ ! -e "$net_cent" ]] && touch $net_cent
@@ -44,7 +44,7 @@ sed -i '/^$/d' $net_dir
 bb=$(printf '%-18s' "$datos_text")
 aa=$(printf '%-19s' "$usr_text")
 cc=$(printf '%-18s' "$porcen_text")
-echo -e "\033[1;36m $(fun_trans "MONITOR DE CONSUMO") \033[1;32m[NEW-ADM]"
+echo -e "\033[1;36m $(fun_trans "Monitor Konsumsi") \033[1;32m[NEW-ADM]"
 echo -e "$barra"
 echo -e "\033[1;33m $aa $bb $cc "
 echo -e "$barra"
@@ -61,7 +61,7 @@ if [ "$(($(echo $u | awk '{print $2}')/970))" -gt "1" ]; then
 echo -e "\033[1;32m $a \033[1;31m$b \033[1;32m$c"
 fi
 done < $net_dir
-[[ "$(cat $net_dir)" = "" ]] && echo -e "\033[1;31m $(fun_trans "Não há informação de consumo")!"
+[[ "$(cat $net_dir)" = "" ]] && echo -e "\033[1;31m $(fun_trans "Tidak ada informasi konsumsi")!"
 echo -e "$barra"
 unset net_dir
 }
@@ -116,7 +116,7 @@ done
 
 ip_drop () {
 user="$1"
-loguser='Password auth succeeded'
+loguser='Password berhasil di pasang'
 touch /tmp/drop
 for ip in `cat /var/log/auth.log | tail -100 | grep "$user" | grep "$loguser" | awk -F "from" '{print $2}' | awk -F ":" '{print $1}'`; do
  if [ "$(cat /tmp/drop | grep "$ip")" = "" ]; then

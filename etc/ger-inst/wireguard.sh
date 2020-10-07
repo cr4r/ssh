@@ -350,8 +350,6 @@ function uninstallWg() {
 	systemctl stop "wg-quick@${SERVER_WG_NIC}" &>/dev/null
 	systemctl disable "wg-quick@${SERVER_WG_NIC}" &>/dev/null
 
-if [[]]
-
 	if [[ ${OS} == 'ubuntu' ]]; then
 		apt-get autoremove --purge -y wireguard qrencode &>/dev/null
 	elif [[ ${OS} == 'debian' ]]; then
