@@ -1,0 +1,4 @@
+cp -r /etc/ger-* /root/ssh/etc
+cp -r /etc/newadm /root/ssh/etc
+cp /etc/new-adm-color /root/ssh/etc
+cp /bin/badvpn-udpgw /root/ssh
