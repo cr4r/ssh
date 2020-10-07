@@ -4,6 +4,7 @@ SCPdir="/etc/newadm" && [[ ! -d ${SCPdir} ]] && exit 1
 SCPfrm="/etc/ger-frm" && [[ ! -d ${SCPfrm} ]] && exit
 SCPinst="/etc/ger-inst" && [[ ! -d ${SCPinst} ]] && exit
 SCPidioma="${SCPdir}/idioma" && [[ ! -e ${SCPidioma} ]] && touch ${SCPidioma}
+
 #LISTA PORTAS
 mportas () {
 unset portas
@@ -348,6 +349,8 @@ function uninstallWg() {
 	msg -ama " $(fun_trans "Menghapus Wireguard")"
 	systemctl stop "wg-quick@${SERVER_WG_NIC}" &>/dev/null
 	systemctl disable "wg-quick@${SERVER_WG_NIC}" &>/dev/null
+
+if [[]]
 
 	if [[ ${OS} == 'ubuntu' ]]; then
 		apt-get autoremove --purge -y wireguard qrencode &>/dev/null

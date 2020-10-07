@@ -603,7 +603,7 @@ case $1 in
 "ssl.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "SSL $(pid_inst stunnel4)";;
 "shadowsocks.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "SHADOWSOCKS $(pid_inst ss-server)";;
 "sockspy.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "SOCKS PYTHON $(pid_inst python)";;
-"wireguard.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "WIREGUARD $(pid_inst wireguard)";;
+"wireguard.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "WIREGUARD $(ifconfig | grep wg0 | grep -q '<UP,POINTOPOINT,RUNNING,NOARP>' && echo -e "\033[1;32m(Aktif)" || echo -e "\033[1;31m(Mati)")";;
 # Menu Instala��o Ger-Inst DEV
 "PDirect.py")return 1;;
 "PGet.py")return 1;;

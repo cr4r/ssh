@@ -144,7 +144,7 @@ fi
 # Configure
 ss_conf(){
 msg -ama "Mengkonfigurasi ShadowSocks"
-mkdir /etc/shadowsocks-libev
+mkdir /etc/shadowsocks-libev &>/dev/null
 cat >/etc/shadowsocks-libev/config.json << EOF
 {
     "server":"0.0.0.0",
@@ -236,7 +236,9 @@ msg -bar
     remove_files
     print_ss_info
 msg -bar
-
+for ufww in $(mportas|awk '{print $2}'); do
+ufw allow $ufww > /dev/null 2>&1
+done
 }
 
 remove_all(){
