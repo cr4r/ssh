@@ -46,7 +46,7 @@ vnc=""
 fi
 meu_ip
 if [[ $vnc = "" ]]; then
-echo -ne " $(fun_trans "VNC não está ativo Deseja ativar?") [S/N]: "; read x
+echo -ne " $(fun_trans "VNC tidak aktif Apakah Anda ingin mengaktifkan?") [S/N]: "; read x
 [[ $x = @(n|N) ]] && return
 echo -e "$barra"
 echo -e " \033[1;36mInstalling VNC:"
@@ -57,42 +57,47 @@ echo -e " \033[1;36mInstalling FIREFOX:"
 fun_bar 'apt-get install firefox -y'
 echo "Activo VNC" > /usr/bin/vnc_log1
 echo -e "$barra"
-echo -e "\033[1;33m $(fun_trans "ENTRE UMA SENHA E DEPOIS DE CONFIRMAR")\033[1;32m"
+echo -e "\033[1;33m $(fun_trans "Masukkan password untuk vnc")\033[1;32m"
 echo -e "$barra"
 vncserver
 echo -e "$barra"
-echo -e " $(fun_trans "VNC conecta usando o ip do vps na porta") 5901"
+echo -e " $(fun_trans "VNC terhubung menggunakan vps ip di port") 5901"
 echo -e " Ex: $IP:5901\033[1;32m"
-echo -e " $(fun_trans "Para acessar a interface gráfica") "
-echo -e " $(fun_trans "Faça o download da PlayStore:") VNC VIWER"
+echo -e " $(fun_trans "Untuk mengakses") "
+echo -e " $(fun_trans "Silahkan download di playstore:") VNC VIWER"
 elif [[ $vnc != "" ]]; then
-echo -e " $(fun_trans "VNC está ativo Deseja desabilitar?") [S/N]: "; read x
+echo -e " $(fun_trans "VNC aktif Apakah Anda ingin menonaktifkan?") [S/N]: "; read x
 [[ $x = @(n|N) ]] && echo -e "$barra" && return
 echo -e "$barra"
 vncserver -kill :1 > /dev/null 2>&1
-echo -e " \033[1;36mremoving VNC:"
-fun_bar 'apt-get purge xfce4 xfce4-goodies gnome-icon-theme tightvncserver -y'
-echo -e "\033[1;36m removing DEPENDENCES:"
-fun_bar 'apt-get purge iceweasel -y'
-echo -e "\033[1;36m removing FIREFOX:"
-fun_bar 'apt-get purge firefox -y'
+echo -e " \033[1;36mHapus VNC:"
+fun_bar 'apt-get --purge remove xfce4 xfce4-goodies gnome-icon-theme tightvncserver -y'
+echo -e "\033[1;36m Hapus DEPENDENCES:"
+fun_bar 'apt-get --purge remove iceweasel -y'
+echo -e "\033[1;36m Hapus FIREFOX:"
+fun_bar 'apt-get --purge remove firefox -y'
+sudo apt-get update&&sudo apt-get upgrade -y &>/dev/null&&sudo apt-get dist-upgrade -y &>/dev/null&&sudo apt-get autoremove -y &>/dev/null
 rm -rf /usr/bin/vnc_log1
 vncserver -kill :1 > /dev/null 2>&1
 vncserver -kill :2 > /dev/null 2>&1
 vncserver -kill :3 > /dev/null 2>&1
+vncserver -kill :4 > /dev/null 2>&1
+vncserver -kill :5 > /dev/null 2>&1
+vncserver -kill :6 > /dev/null 2>&1
+vncserver -kill :7 > /dev/null 2>&1
 fi
 }
 
 vncpurge_fun () {
-echo -ne " $(fun_trans "Si VNC está ativo Deseja desabilitar?") [S/N]: "; read x
+echo -ne " $(fun_trans "Jika VNC aktif Apakah Anda ingin menonaktifkan?") [S/N]: "; read x
 [[ $x = @(n|N) ]] && return
 echo -e "$barra"
 vncserver -kill :1 > /dev/null 2>&1
-echo -e " \033[1;36mremoving VNC:"
+echo -e " \033[1;36mMenghapus VNC:"
 fun_bar 'apt-get purge xfce4 xfce4-goodies gnome-icon-theme tightvncserver -y'
-echo -e "\033[1;36m removing DEPENDENCES:"
+echo -e "\033[1;36m Hapus DEPENDENCES:"
 fun_bar 'apt-get purge iceweasel -y'
-echo -e "\033[1;36m removing FIREFOX:"
+echo -e "\033[1;36m Hapus FIREFOX:"
 fun_bar 'apt-get purge firefox -y'
 rm -rf /usr/bin/vnc_log1
 vncserver -kill :1 > /dev/null 2>&1
@@ -102,22 +107,22 @@ vncserver -kill :3 > /dev/null 2>&1
 
 backup (){
 #BACKUP ANTI-DDOS
-wget -O /etc/ger-frm/vnc.sh https://raw.githubusercontent.com/AAAAAEXQOSyIpN2JZ0ehUQ/ADM-ULTIMATE-NEW-FREE/master/HerramientasADM/vnc.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/vnc.sh
+wget -O /etc/ger-frm/vnc.sh https://raw.githubusercontent.com/cr4r1/ssh/master/instal/vnc.sh > /dev/null 2>&1; chmod +x /etc/ger-frm/vnc.sh
 fun_bar "chmod -R 777 /etc/ger-frm/vnc.sh"
 chmod -R 777 /etc/ger-frm/vnc.sh > /dev/null 2>&1
 echo -e "$barra"
-echo -e "${cor[3]}$(fun_trans "VNC ACTUALIZADO CON SUCESSO")"
+echo -e "${cor[3]}$(fun_trans "VNC DIPERBARUI DENGAN SUKSES")"
 echo -e "$barra"
 }
 
 [[ -e /usr/bin/vnc_log1 ]] && vnc_log1=$(echo -e "\033[1;32mon ") || vnc_log1=$(echo -e "\033[1;31moff ")
 
-msg -ama "$(fun_trans "VNC SERVER") ${cor[4]}[NEW-ADM]"
+msg -ama "$(fun_trans "VNC SERVER") ${cor[4]}"
 echo -e "$barra"
 echo -ne "\033[1;32m [1] > " && msg -azu "$(fun_trans "VNC SERVER") $vnc_log1"
-echo -ne "\033[1;32m [2] > " && msg -azu "$(fun_trans "ELIMINAR VNC")"
-echo -ne "\033[1;32m [3] > " && msg -azu "$(fun_trans "ACTUALIZAR VNC")"
-echo -ne "\033[1;32m [0] > " && msg -bra "$(fun_trans "VOLTAR")"
+echo -ne "\033[1;32m [2] > " && msg -azu "$(fun_trans "Hapus VNC")"
+echo -ne "\033[1;32m [3] > " && msg -azu "$(fun_trans "Perbarui VNC")"
+echo -ne "\033[1;32m [0] > " && msg -bra "$(fun_trans "Kembali")"
 echo -e "$barra"
 while [[ ${arquivoonlineadm} != @(0|[1-2]) ]]; do
 read -p "Selecione a Opcao: " arquivoonlineadm
