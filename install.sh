@@ -46,6 +46,7 @@ inst_components () {
     [[ $(dpkg --get-selections|grep -w "unzip"|head -1) ]] || apt-get install unzip -y &>/dev/null
     [[ $(dpkg --get-selections|grep -w "zip"|head -1) ]] || apt-get install zip -y &>/dev/null
     [[ $(dpkg --get-selections|grep -w "lsof"|head -1) ]] || apt-get install lsof -y &>/dev/null
+    [[ $(dpkg --get-selections|grep -w "git"|head -1) ]] || apt-get install git -y &>/dev/null
     [[ $(dpkg --get-selections|grep -w "apache2"|head -1) ]] || {
         apt-get install apache2 -y &>/dev/null
         sed -i "s;Listen 80;Listen 81;g" /etc/apache2/ports.conf
@@ -55,7 +56,7 @@ inst_components () {
 
 funcao_idioma () {
     msg -bar2
-    declare -A idioma=( [1]="en English" [2]="fr Franch" [3]="de German" [4]="it Italian" [5]="pl Polish" [6]="pt Portuguese" [7]="es Spanish" [8]="tr Turkish" )
+    declare -A idioma=( [1]="id Indonesia" [2]="en English" [3]="fr Franch" [4]="de German" [5]="it Italian" [6]="pl Polish" [7]="pt Portuguese" [8]="es Spanish" [9]="tr Turkish" )
     for ((i=1; i<=12; i++)); do
         valor1="$(echo ${idioma[$i]}|cut -d' ' -f2)"
         [[ -z $valor1 ]] && break
@@ -90,35 +91,35 @@ funcao_idioma () {
     msg -bar2
     unset selection
     while [[ ${selection} != @([1-8]) ]]; do
-        echo -ne "\033[1;37mSELECT: " && read selection
+        echo -ne "\033[1;37mPilih: " && read selection
         tput cuu1 && tput dl1
     done
     pv="$(echo ${idioma[$selection]}|cut -d' ' -f1)"
-    [[ ${#id} -gt 2 ]] && id="pt" || id="$pv"
+    [[ ${#id} -gt 2 ]] && id="id" || id="$pv"
     byinst="true"
 }
 
 install_fim () {
-    msg -ama "$(source trans -b pt:${id} "Instalacao Completa, Utilize os Comandos"|sed -e 's/[^a-z -]//ig')" && msg bar2
-    echo -e " menu / adm"
+    msg -ama "$(source trans -b pt:${id} "Instalasi selesai, Gunakan Perintah"|sed -e 's/[^a-z -]//ig')" && msg bar2
+    echo -e " menu / cr4r"
     msg -bar2
 }
 
-install_hosts () {
-    _arq_host="/etc/hosts"
-    _host[0]="d1n212ccp6ldpw.cloudfront.net"
-    _host[1]="dns.whatsapp.net"
-    _host[2]="portalrecarga.vivo.com.br/recarga"
-    _host[3]="navegue.vivo.com.br/controle/"
-    _host[4]="navegue.vivo.com.br/pre/"
-    _host[5]="www.whatsapp.net"
-    _host[6]="c.whatsapp.net"
-    for host in ${_host[@]}; do
-        if [[ "$(grep -w "$host" $_arq_host | wc -l)" = "0" ]]; then
-            sed -i "3i\127.0.0.1 $host" $_arq_host
-        fi
-    done
-}
+# install_hosts () {
+#     _arq_host="/etc/hosts"
+#     _host[0]="d1n212ccp6ldpw.cloudfront.net"
+#     _host[1]="dns.whatsapp.net"
+#     _host[2]="portalrecarga.vivo.com.br/recarga"
+#     _host[3]="navegue.vivo.com.br/controle/"
+#     _host[4]="navegue.vivo.com.br/pre/"
+#     _host[5]="www.whatsapp.net"
+#     _host[6]="c.whatsapp.net"
+#     for host in ${_host[@]}; do
+#         if [[ "$(grep -w "$host" $_arq_host | wc -l)" = "0" ]]; then
+#             sed -i "3i\127.0.0.1 $host" $_arq_host
+#         fi
+#     done
+# }
 
 ofus () {
     unset txtofus
@@ -150,20 +151,20 @@ verificar_arq () {
     case $1 in
         "menu"|"message.txt")ARQ="${SCPdir}/";; #Menu
         "usercodes")ARQ="${SCPusr}/";; #User
-        "openssh.sh")ARQ="${SCPinst}/";; #Instalacao
-        "apache2.sh")ARQ="${SCPinst}/";; #Instalacao
-        "squid.sh")ARQ="${SCPinst}/";; #Instalacao
-        "dropbear.sh")ARQ="${SCPinst}/";; #Instalacao
-        "openvpn.sh")ARQ="${SCPinst}/";; #Instalacao
-        "ssl.sh")ARQ="${SCPinst}/";; #Instalacao
-        "shadowsocks.sh")ARQ="${SCPinst}/";; #Instalacao
-        "budp.sh")ARQ="${SCPinst}/";; #Instalacao
-        "sslh.sh")ARQ="${SCPinst}/";; #Instalacao
-        "vnc.sh")ARQ="${SCPinst}/";; #Instalacao
-        "webmin.sh")ARQ="${SCPinst}/";; #Instalacao
-        "v2ray.sh")ARQ="${SCPinst}/";; #Instalacao
-        "sockspy.sh"|"PDirect.py"|"PPub.py"|"PPriv.py"|"POpen.py"|"PGet.py")ARQ="${SCPinst}/";; #Instalacao
-        *)ARQ="${SCPfrm}/";; #Ferramentas
+        "openssh.sh")ARQ="${SCPinst}/";; #Instalasi
+        "apache2.sh")ARQ="${SCPinst}/";; #Instalasi
+        "squid.sh")ARQ="${SCPinst}/";; #Instalasi
+        "dropbear.sh")ARQ="${SCPinst}/";; #Instalasi
+        "openvpn.sh")ARQ="${SCPinst}/";; #Instalasi
+        "ssl.sh")ARQ="${SCPinst}/";; #Instalasi
+        "shadowsocks.sh")ARQ="${SCPinst}/";; #Instalasi
+        "budp.sh")ARQ="${SCPinst}/";; #Instalasi
+        "sslh.sh")ARQ="${SCPinst}/";; #Instalasi
+        "vnc.sh")ARQ="${SCPinst}/";; #Instalasi
+        "webmin.sh")ARQ="${SCPinst}/";; #Instalasi
+        "v2ray.sh")ARQ="${SCPinst}/";; #Instalasi
+        "sockspy.sh"|"PDirect.py"|"PPub.py"|"PPriv.py"|"POpen.py"|"PGet.py")ARQ="${SCPinst}/";; #Instalasi
+        *)ARQ="${SCPfrm}/";; #Tools
     esac
     mv -f ${SCPinstal}/$1 ${ARQ}/$1
     chmod +x ${ARQ}/$1
@@ -171,7 +172,7 @@ verificar_arq () {
 
 # Instala��o NEW-ULTIMATE
 fun_ip
-wget -O /usr/bin/trans https://raw.githubusercontent.com/AAAAAEXQOSyIpN2JZ0ehUQ/ADM-ULTIMATE-NEW-FREE/master/Install/trans &> /dev/null
+wget -O /usr/bin/trans https://raw.githubusercontent.com/cr4r/ssh/main/Install/trans &> /dev/null
 clear
 msg -bar2
 msg -ama "[ NEW - ULTIMATE - SCRIPT ]    \033[1;37m@AAAAAEXQOSyIpN2JZ0ehUQ"
@@ -179,35 +180,28 @@ msg -ama "[ NEW - ULTIMATE - SCRIPT ]    \033[1;37m@AAAAAEXQOSyIpN2JZ0ehUQ"
     [[ ${#1} -gt 2 ]] && funcao_idioma || id="$1"
 }
 error_fun () {
-    msg -bar2 && msg -verm "$(source trans -b pt:${id} "Esta Chave Era de Outro Servidor Portanto Foi Excluida"|sed -e 's/[^a-z -]//ig') " && msg -bar2
+    msg -bar2 && msg -verm "$(source trans -b pt:${id} "Kunci Ini Dari Server Lain Jadi Dihapus"|sed -e 's/[^a-z -]//ig') " && msg -bar2
     [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}
     exit 1
 }
-invalid_key () {
-    msg -bar2 && msg -verm "Key Failed! " && msg -bar2
-    [[ -e $HOME/lista-arq ]] && rm $HOME/lista-arq
-    exit 1
-}
-Key="qra-atsilK?29@%6087%?88d5K8888:%05+08+@@?+91"
 REQUEST="https://raw.githubusercontent.com/cr4r/ssh/main/request"
-# https://raw.githubusercontent.com/cr4r/ssh/main/request
 echo "$IP" > /usr/bin/vendor_code
 cd $HOME
 msg -ne "Files: "
-wget -O $HOME/lista-arq ${REQUEST}/lista-req > /dev/null 2>&1 && echo -e "\033[1;32m Verified" || {
-    echo -e "\033[1;32m Verified"
+wget -O $HOME/lista-req ${REQUEST}/lista-req > /dev/null 2>&1 && echo -e "\033[1;32m Diverifikasi" || {
+    echo -e "\033[1;32m Diverifikasi"
     invalid_key
     exit
 }
 sleep 1s
 updatedb
-if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") ]]; then
+if [[ -e $HOME/lista-req ]] && [[ ! $(cat $HOME/lista-req|grep "Key Salah!") ]]; then
     msg -bar2
-    msg -ama "$(source trans -b pt:${id} "BEM VINDO, OBRIGADO POR UTILIZAR"|sed -e 's/[^a-z -]//ig'): \033[1;31m[NEW-ULTIMATE]"
+    msg -ama "$(source trans -b pt:${id} "SELAMAT DATANG, TERIMA KASIH TELAH MENGGUNAKAN"|sed -e 's/[^a-z -]//ig'): \033[1;31m[VPN-SSH-Tools]"
     [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
     pontos="."
-    stopping="$(source trans -b pt:${id} "Verificando Atualizacoes"|sed -e 's/[^a-z -]//ig')"
-    for arqx in $(cat $HOME/lista-arq); do
+    stopping="$(source trans -b pt:${id} "Memeriksa Pembaruan"|sed -e 's/[^a-z -]//ig')"
+    for arqx in $(cat $HOME/lista-req); do
         msg -verm "${stopping}${pontos}"
         wget -O ${SCPinstal}/${arqx} ${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
         tput cuu1 && tput dl1
@@ -215,20 +209,20 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
     done
     sleep 1s
     msg -bar2
-    listaarqs="$(locate "lista-arq"|head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs
-    cat /etc/bash.bashrc|grep -v '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' > /etc/bash.bashrc.2
-    echo -e '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' >> /etc/bash.bashrc.2
-    mv -f /etc/bash.bashrc.2 /etc/bash.bashrc
+    listaarqs="$(locate "lista-req"|head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs
+    # cat /etc/bash.bashrc|grep -v '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' > /etc/bash.bashrc.2
+    # echo -e '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' >> /etc/bash.bashrc.2
+    # mv -f /etc/bash.bashrc.2 /etc/bash.bashrc
     echo "${SCPdir}/menu" > /usr/bin/menu && chmod +x /usr/bin/menu
-    echo "${SCPdir}/menu" > /usr/bin/adm && chmod +x /usr/bin/adm
+    echo "${SCPdir}/menu" > /usr/bin/cr4r && chmod +x /usr/bin/cr4r
     echo "${SCPdir}/menu" > /bin/h && chmod +x /bin/h
-    wget -O $HOME/versao https://raw.githubusercontent.com/AAAAAEXQOSyIpN2JZ0ehUQ/ADM-ULTIMATE-NEW-FREE/master/versao &> /dev/null
-    wget -O /bin/versao_script https://raw.githubusercontent.com/AAAAAEXQOSyIpN2JZ0ehUQ/ADM-ULTIMATE-NEW-FREE/master/Install/versaoatt &> /dev/null
+    wget -O $HOME/versi https://raw.githubusercontent.com/cr4r/ssh/main/versi &> /dev/null
+    wget -O /bin/versi_script https://raw.githubusercontent.com/cr4r/ssh/main/Install/versi &> /dev/null
     inst_components
-    install_hosts
-    echo "$Key" > ${SCPdir}/key.txt
+    # install_hosts
+    # echo "$Key" > ${SCPdir}/key.txt
     [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}
-    [[ ${#id} -gt 2 ]] && echo "pt" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
+    [[ ${#id} -gt 2 ]] && echo "id" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
     [[ ${byinst} = "true" ]] && install_fim
 else
     invalid_key

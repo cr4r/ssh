@@ -1,4 +1,4 @@
 cp -r /etc/ger-* /root/ssh/etc
-cp -r /etc/newadm /root/ssh/etc
-cp /etc/new-adm-color /root/ssh/etc
+cp -r /etc/cr4r /root/ssh/etc
+cp /etc/new-cr4r-color /root/ssh/etc
 cp /bin/badvpn-udpgw /root/ssh
