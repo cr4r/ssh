@@ -1,9 +1,9 @@
 #!/bin/bash
 declare -A cor=( [0]="\033[1;37m" [1]="\033[1;34m" [2]="\033[1;32m" [3]="\033[1;36m" [4]="\033[1;31m" )
-SCPdir="/etc/newadm" && [[ ! -d ${SCPdir} ]] && exit 1
+SCPdir="/etc/cr4r" && [[ ! -d ${SCPdir} ]] && exit 1
 SCPfrm="/etc/ger-frm" && [[ ! -d ${SCPfrm} ]] && exit
 SCPinst="/etc/ger-inst" && [[ ! -d ${SCPinst} ]] && exit
-SCPidioma="${SCPdir}/idioma" && [[ ! -e ${SCPidioma} ]] && touch ${SCPidioma}
+SCPbahasa="${SCPdir}/bahasa" && [[ ! -e ${SCPbahasa} ]] && touch ${SCPbahasa}
 API_TRANS="aHR0cDovL2dpdC5pby90cmFucw=="
 SUB_DOM='base64 -d'
 wget -O /usr/bin/trans $(echo $API_TRANS|$SUB_DOM) &> /dev/null

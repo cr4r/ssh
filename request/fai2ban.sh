@@ -1,7 +1,7 @@
 #!/bin/bash
 declare -A cor=( [0]="\033[1;37m" [1]="\033[1;34m" [2]="\033[1;31m" [3]="\033[1;33m" [4]="\033[1;32m" )
 barra="\033[0m\e[34m======================================================\033[1;37m"
-SCPdir="/etc/newadm" && [[ ! -d ${SCPdir} ]] && exit 1
+SCPdir="/etc/cr4r" && [[ ! -d ${SCPdir} ]] && exit 1
 SCPfrm="/etc/ger-frm" && [[ ! -d ${SCPfrm} ]] && exit
 SCPinst="/etc/ger-inst" && [[ ! -d ${SCPinst} ]] && exit
 serv_sshd=$(lsof -V -i tcp -P -n | grep -v "ESTABLISHED" |grep -v "COMMAND" | grep "LISTEN" | grep "sshd")
@@ -12,12 +12,12 @@ fun_trans () {
 local texto
 local retorno
 declare -A texto
-SCPidioma="${SCPdir}/idioma"
-[[ ! -e ${SCPidioma} ]] && touch ${SCPidioma}
-local LINGUAGE=$(cat ${SCPidioma})
-[[ -z $LINGUAGE ]] && LINGUAGE=pt
-[[ ! -e /etc/texto-adm ]] && touch /etc/texto-adm
-source /etc/texto-adm
+SCPbahasa="${SCPdir}/bahasa"
+[[ ! -e ${SCPbahasa} ]] && touch ${SCPbahasa}
+local LINGUAGE=$(cat ${SCPbahasa})
+[[ -z $LINGUAGE ]] && LINGUAGE=id
+[[ ! -e /etc/texto-cr4r ]] && touch /etc/texto-cr4r
+source /etc/texto-cr4r
 if [[ -z "$(echo ${texto[$@]})" ]]; then
  retorno="$(source trans -e google -b pt:${LINGUAGE} "$@"|sed -e 's/[^a-z0-9 -]//ig' 2>/dev/null)"
  if [[ $retorno = "" ]];then
@@ -26,7 +26,7 @@ if [[ -z "$(echo ${texto[$@]})" ]]; then
  if [[ $retorno = "" ]];then 
  retorno="$(source trans -e yandex -b pt:${LINGUAGE} "$@"|sed -e 's/[^a-z0-9 -]//ig' 2>/dev/null)"
  fi
-echo "texto[$@]='$retorno'"  >> /etc/texto-adm
+echo "texto[$@]='$retorno'"  >> /etc/texto-cr4r
 echo "$retorno"
 else
 echo "${texto[$@]}"

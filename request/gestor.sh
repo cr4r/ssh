@@ -1,10 +1,10 @@
 #!/bin/bash
 declare -A cor=( [0]="\033[1;37m" [1]="\033[1;34m" [2]="\033[1;31m" [3]="\033[1;33m" [4]="\033[1;32m" )
 barra="\033[0m\e[34m======================================================\033[1;37m"
-SCPdir="/etc/newadm" && [[ ! -d ${SCPdir} ]] && exit 1
+SCPdir="/etc/cr4r" && [[ ! -d ${SCPdir} ]] && exit 1
 SCPfrm="/etc/ger-frm" && [[ ! -d ${SCPfrm} ]] && exit
 SCPinst="/etc/ger-inst" && [[ ! -d ${SCPinst} ]] && exit
-SCPidioma="${SCPdir}/idioma" && [[ ! -e ${SCPidioma} ]] && touch ${SCPidioma}
+SCPbahasa="${SCPdir}/bahasa" && [[ ! -e ${SCPbahasa} ]] && touch ${SCPbahasa}
 
 fun_ip () {
 if [[ -e /etc/MEUIPADM ]]; then
@@ -280,13 +280,13 @@ while true; do
 done
 echo -e "\033[1;33m]\033[1;31m -\033[1;32m 100%\033[1;37m"
 }
-#IDIOMA AND TEXTO
+#bahasa AND TEXTO
 txt[323]="AUTENTICACIÃ“N DE PROXY SQUID"
 txt[324]="Erro ao gerar senha, a autenticacao do squid nao foi iniciada!"
 txt[325]="AUTENTICACAO DO LIQUIDO DE PROXY INICIADO."
 txt[326]="Proxy squid nao instalado, nao pode continuar."
-txt[327]="AUTENTICACAO DO LÍQUIDO DE PROXY DESACTIVADO."
-txt[328]="O usuário nao pode ser nulo."
+txt[327]="AUTENTICACAO DO Lï¿½QUIDO DE PROXY DESACTIVADO."
+txt[328]="O usuï¿½rio nao pode ser nulo."
 txt[329]="Voco quer habilitar a autenticacao de proxy do squid?"
 txt[330]="Deseja desativar a autenticacao do proxy do squid?"
 txt[331]="SU IP:"

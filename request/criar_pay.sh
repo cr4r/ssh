@@ -4,7 +4,7 @@ barra="\033[0m\e[34m======================================================\033[1
 SCPdir="/etc/newadm" && [[ ! -d ${SCPdir} ]] && exit 1
 SCPfrm="/etc/ger-frm" && [[ ! -d ${SCPfrm} ]] && exit
 SCPinst="/etc/ger-inst" && [[ ! -d ${SCPinst} ]] && exit
-SCPidioma="${SCPdir}/idioma" && [[ ! -e ${SCPidioma} ]] && touch ${SCPidioma}
+SCPbahasa="${SCPdir}/bahasa" && [[ ! -e ${SCPbahasa} ]] && touch ${SCPbahasa}
 
 #PAYYLOADS
 link_bin="https://raw.githubusercontent.com/AAAAAEXQOSyIpN2JZ0ehUQ/ADM-ULTIMATE-NEW-FREE/master/Install/payloads"
@@ -26,7 +26,7 @@ msg -ama "$(fun_trans " Digite um host para criar payloads genericas!")"
 msg -bar
 read -p "$(fun_trans " host"): " valor1
 if [ "$valor1" = "" ]; then
-msg -bra "$(fun_trans "Não adicione nada.")"
+msg -bra "$(fun_trans "Nï¿½o adicione nada.")"
 return
 fi
 meu_ip

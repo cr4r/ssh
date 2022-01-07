@@ -1,9 +1,9 @@
 #!/bin/bash
-SCPdir="/etc/newadm" && [[ ! -d ${SCPdir} ]] && exit 1
+SCPdir="/etc/cr4r" && [[ ! -d ${SCPdir} ]] && exit 1
 SCPusr="${SCPdir}/ger-user" && [[ ! -d ${SCPusr} ]] && mkdir ${SCPusr}
 SCPfrm="/etc/ger-frm" && [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
 SCPinst="/etc/ger-inst" && [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
-SCPidioma="${SCPdir}/idioma" && [[ ! -e ${SCPidioma} ]] && touch ${SCPidioma}
+SCPbahasa="${SCPdir}/bahasa" && [[ ! -e ${SCPbahasa} ]] && touch ${SCPbahasa}
 # VERIFICANDO  CONDIÃ‡Ã•ES PRIMARIAS
 [[ $(dpkg --get-selections|grep -w "jq"|head -1) ]] || apt-get install jq -y &>/dev/null
 [[ ! -e "/bin/ShellBot.sh" ]] && wget -O /bin/ShellBot.sh https://raw.githubusercontent.com/AAAAAEXQOSyIpN2JZ0ehUQ/ADM-ULTIMATE-NEW-FREE/master/Install/ShellBot.sh &> /dev/null
@@ -12,7 +12,7 @@ SCPidioma="${SCPdir}/idioma" && [[ ! -e ${SCPidioma} ]] && touch ${SCPidioma}
 if [[ $1 = "id" || -z $(ps aux |grep -v grep |grep -w "ADMbot.sh"|grep dmS|awk '{print $2}') ]]; then
 [[ -z $2 ]] && echo -ne "\033[1;37m$(fun_trans "Digite o Token do bot"): " && read TOKEN || TOKEN="$2"
 [[ -z "$TOKEN" ]] && exit 1 #SEM TOKEN, SEM BOT
-IDIOMA="$(cat ${SCPidioma})" && [[ -z $IDIOMA ]] && IDIOMA="pt" #ARGUMENTO 2 (IDIOMA)
+BAHASA="$(cat ${SCPbahasa})" && [[ -z $BAHASA ]] && BAHASA="id" #ARGUMENTO 2 (bahasa)
 [[ -z $3 ]] && echo -ne "\033[1;37m$(fun_trans "Digite seu Usuario"): " && read USERLIB || USERLIB="$3"
 [[ -z "$USERLIB" ]] && exit 1 #USUARIO
 [[ -z $4 ]] && echo -ne "\033[1;37m$(fun_trans "Digite sua Senha"): " && read PASSLIB || PASSLIB="$4"
