@@ -3,7 +3,7 @@ cd $HOME
 #SCPdir="/etc/newadm"
 SCPdir="/etc/cr4r"
 SCPinstal="$HOME/install"
-SCPidioma="${SCPdir}/idioma"
+SCPbahasa="${SCPdir}/bahasa"
 # SCPusr="${SCPdir}/ger-user"
 SCPusr="${SCPdir}/user"
 SCPfrm="/etc/ger-frm"
@@ -36,7 +36,9 @@ fun_ip () {
 }
 
 inst_components () {
+    msg -ama "Sedang memeriksa plugin yang dibutuhkan"
     [[ $(dpkg --get-selections|grep -w "nano"|head -1) ]] || apt-get install nano -y &>/dev/null
+    [[ $(dpkg --get-selections|grep -w "iproute2"|head -1) ]] || apt-get install iproute2 -y &>/dev/null
     [[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] || apt-get install bc -y &>/dev/null
     [[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] || apt-get install screen -y &>/dev/null
     [[ $(dpkg --get-selections|grep -w "python"|head -1) ]] || apt-get install python -y &>/dev/null
@@ -54,11 +56,12 @@ inst_components () {
     }
 }
 
-funcao_idioma () {
+func_bahasa () {
     msg -bar2
-    declare -A idioma=( [1]="id Indonesia" [2]="en English" [3]="fr Franch" [4]="de German" [5]="it Italian" [6]="pl Polish" [7]="pt Portuguese" [8]="es Spanish" [9]="tr Turkish" )
+    msg -ama "Silahkan pilih bahasa anda"
+    declare -A bahasa=( [1]="id Indonesia" [2]="en English" [3]="fr Franch" [4]="de German" [5]="it Italian" [6]="pl Polish" [7]="pt Portuguese" [8]="es Spanish" [9]="tr Turkish" )
     for ((i=1; i<=12; i++)); do
-        valor1="$(echo ${idioma[$i]}|cut -d' ' -f2)"
+        valor1="$(echo ${bahasa[$i]}|cut -d' ' -f2)"
         [[ -z $valor1 ]] && break
         valor1="\033[1;32m[$i] > \033[1;33m$valor1"
         while [[ ${#valor1} -lt 37 ]]; do
@@ -66,7 +69,7 @@ funcao_idioma () {
         done
         echo -ne "$valor1"
         let i++
-        valor2="$(echo ${idioma[$i]}|cut -d' ' -f2)"
+        valor2="$(echo ${bahasa[$i]}|cut -d' ' -f2)"
         [[ -z $valor2 ]] && {
             echo -e " "
             break
@@ -77,7 +80,7 @@ funcao_idioma () {
         done
         echo -ne "$valor2"
         let i++
-        valor3="$(echo ${idioma[$i]}|cut -d' ' -f2)"
+        valor3="$(echo ${bahasa[$i]}|cut -d' ' -f2)"
         [[ -z $valor3 ]] && {
             echo -e " "
             break
@@ -94,13 +97,13 @@ funcao_idioma () {
         echo -ne "\033[1;37mPilih: " && read selection
         tput cuu1 && tput dl1
     done
-    pv="$(echo ${idioma[$selection]}|cut -d' ' -f1)"
+    pv="$(echo ${bahasa[$selection]}|cut -d' ' -f1)"
     [[ ${#id} -gt 2 ]] && id="id" || id="$pv"
     byinst="true"
 }
 
 install_fim () {
-    msg -ama "$(source trans -b pt:${id} "Instalasi selesai, Gunakan Perintah"|sed -e 's/[^a-z -]//ig')" && msg bar2
+    msg -ama "$(source trans -b pt:${id} "Instalasi selesai, Silahkan gunakan perintah"|sed -e 's/[^a-z -]//ig')" && msg bar2
     echo -e " menu / cr4r"
     msg -bar2
 }
@@ -149,7 +152,7 @@ verificar_arq () {
     [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
     [[ ! -d ${SCPinst} ]] && mkdir ${SCPinst}
     case $1 in
-        "menu"|"message.txt")ARQ="${SCPdir}/";; #Menu
+        "menu"|"pesan.txt")ARQ="${SCPdir}/";; #Menu
         "usercodes")ARQ="${SCPusr}/";; #User
         "openssh.sh")ARQ="${SCPinst}/";; #Instalasi
         "apache2.sh")ARQ="${SCPinst}/";; #Instalasi
@@ -170,14 +173,13 @@ verificar_arq () {
     chmod +x ${ARQ}/$1
 }
 
-# Instala��o NEW-ULTIMATE
 fun_ip
 wget -O /usr/bin/trans https://raw.githubusercontent.com/cr4r/ssh/main/Install/trans &> /dev/null
 clear
 msg -bar2
-msg -ama "[ NEW - ULTIMATE - SCRIPT ]    \033[1;37m@AAAAAEXQOSyIpN2JZ0ehUQ"
-[[ $1 = "" ]] && funcao_idioma || {
-    [[ ${#1} -gt 2 ]] && funcao_idioma || id="$1"
+msg -ama "[ SCRIPT - VPN - SSH ]    \033[1;37m@cr4r"
+[[ $1 = "" ]] && func_bahasa || {
+    [[ ${#1} -gt 2 ]] && func_bahasa || id="$1"
 }
 error_fun () {
     msg -bar2 && msg -verm "$(source trans -b pt:${id} "Kunci Ini Dari Server Lain Jadi Dihapus"|sed -e 's/[^a-z -]//ig') " && msg -bar2
@@ -197,7 +199,7 @@ sleep 1s
 updatedb
 if [[ -e $HOME/lista-req ]] && [[ ! $(cat $HOME/lista-req|grep "Key Salah!") ]]; then
     msg -bar2
-    msg -ama "$(source trans -b pt:${id} "SELAMAT DATANG, TERIMA KASIH TELAH MENGGUNAKAN"|sed -e 's/[^a-z -]//ig'): \033[1;31m[VPN-SSH-Tools]"
+    msg -ama "$(source trans -b pt:${id} "Terima kasih sudah menggunkan tool ini"|sed -e 's/[^a-z -]//ig'): \033[1;31m"
     [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
     pontos="."
     stopping="$(source trans -b pt:${id} "Memeriksa Pembaruan"|sed -e 's/[^a-z -]//ig')"
@@ -222,7 +224,7 @@ if [[ -e $HOME/lista-req ]] && [[ ! $(cat $HOME/lista-req|grep "Key Salah!") ]];
     # install_hosts
     # echo "$Key" > ${SCPdir}/key.txt
     [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}
-    [[ ${#id} -gt 2 ]] && echo "id" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
+    [[ ${#id} -gt 2 ]] && echo "id" > ${SCPbahasa} || echo "${id}" > ${SCPbahasa}
     [[ ${byinst} = "true" ]] && install_fim
 else
     invalid_key

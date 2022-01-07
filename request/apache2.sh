@@ -51,46 +51,46 @@ local PORTENTRY="$2"
 }
 
 apache2_restart () {
-msg -ama " $(fun_trans "INSTALANDO APACHE")"
+msg -ama " $(fun_trans "Instalasi APACHE 2")"
 msg -bar
 fun_bar "apt-get install apache2 -y"
 sed -i "s;Listen 80;Listen 81;g" /etc/apache2/ports.conf
 msg -bar
 sleep 2s
-msg -ne "\033[1;31m [ ! ] \033[1;33m$(fun_trans "REINICIANDO SERVICOS")"
+msg -ne "\033[1;31m [ ! ] \033[1;33m$(fun_trans "Mulai ulang service")"
 service apache2 start > /dev/null 2>&1
 service apache2 restart > /dev/null 2>&1 &
 echo -e " \033[1;32m[OK]"
 msg -bar
-echo -e " \033[1;33m$(fun_trans "APACHE2 PORTA 81 POR PADRAO ")"
+echo -e " \033[1;33m$(fun_trans "Apache2 menggunakan port 81 ")"
 msg -bar
 sleep 0.5s
-msg -ama " $(fun_trans "Sucesso Procedimento Feito")"
+msg -ama " $(fun_trans "Mulai ulang selesai")"
 msg -bar
 }
 
-remover_apache2 () {
-msg -ama " $(fun_trans "DESINTALANDO APACHE")"
+hapus_apache2 () {
+msg -ama " $(fun_trans "Hapus Apache2")"
 msg -bar
 /etc/init.d/apache2 stop > /dev/null 2>&1
 fun_bar "sleep 3s"
 apt-get purge apache2 -y &>/dev/null
 msg -bar
-msg -ama " $(fun_trans "Apache removido Com Sucesso!")"
+msg -ama " $(fun_trans "Apache2 sudah dihapus!")"
 [[ -d /etc/apache2 ]] && rm -rf /etc/apache2
 msg -bar
 }
 
 edit_apache () {
-msg -azu "$(fun_trans "REDEFINIR PORTAS APACHE")"
+msg -azu "$(fun_trans "Edit port apache")"
 msg -bar
 local CONF="/etc/apache2/ports.conf"
 local NEWCONF="$(cat ${CONF})"
-msg -ne "$(fun_trans "Novas Porta"): "
+msg -ne "$(fun_trans "Port Baru"): "
 read -p "" newports
 for PTS in `echo ${newports}`; do
 verify_port apache "${PTS}" && echo -e "\033[1;33mPort $PTS \033[1;32mOK" || {
-echo -e "\033[1;33mPort $PTS \033[1;31mFAIL"
+echo -e "\033[1;33mPort $PTS \033[1;31mgagal"
 msg -bar
 exit 1
 }
@@ -108,33 +108,33 @@ else
 echo -e "${varline}" >> ${CONF}
 fi
 done <<< "${NEWCONF}"
-msg -azu "$(fun_trans "AGUARDE")"
+msg -azu "$(fun_trans "Merestart")"
 service apache2 restart &>/dev/null
 sleep 1s
 msg -bar
-msg -azu "$(fun_trans "PORTAS REDEFINIDAS")"
+msg -azu "$(fun_trans "Port sudah ditetapkan")"
 msg -bar
 }
 
-fun_iniciastop () {
+fun_initstop () {
 if [[ ! -e /etc/apache2/apache_stop ]]; then
-echo -e "\033[1;36mPARANDO APACHE"
+echo -e "\033[1;36mMenghentikan apache2"
 msg -bar
 fun_bar "service apache2 stop"
 service apache2 stop > /dev/null 2>&1
 echo "#STOP" > /etc/apache2/apache_stop
 msg -bar
-echo -e "\033[1;33mAPACHE PARADO COM SUCESSO"
+echo -e "\033[1;33mAPACHE BERHASIL DIHENTIKAN"
 msg -bar
 exit 1
 fi
-echo -e "\033[1;36mINICIANDO APACHE"
+echo -e "\033[1;36mMULAI APACHE"
 msg -bar
 fun_bar "service apache2 start"
 service apache2 restart > /dev/null 2>&1
 rm -rf /etc/apache2/apache_stop
 msg -bar
-echo -e "\033[1;33mAPACHE ACTIVADO COM SUCESSO"
+echo -e "\033[1;33mAPACHE BERHASIL DIAKTIFKAN"
 msg -bar
 }
 
@@ -150,7 +150,7 @@ Port=$(echo {$port} | awk '{print $9}' | awk -F ":" '{print $2}')
 NOREPEAT+="$Port\n"
 case ${reQ} in
 apache|apache2)
-[[ -z $APC ]] && msg -bar && local APC="\033[1;32m $(fun_trans "PORTA") \033[1;37m"
+[[ -z $APC ]] && msg -bar && local APC="\033[1;32m $(fun_trans "Port") \033[1;37m"
 APC+="$Port ";;
 esac
 done <<< "${portasVAR}"
@@ -167,11 +167,11 @@ unset OPENBAR
 msg -ama "$(fun_trans "MENU APACHE")"
 mine_port
 msg -bar
-echo -ne "\033[1;32m [0] > " && msg -bra "$(fun_trans "VOLTAR ")"
-echo -ne "\033[1;32m [1] > " && msg -azu "$(fun_trans "DESINTALAR APACHE")"
-echo -ne "\033[1;32m [2] > " && msg -azu "$(fun_trans "REDEFINIR PORTA APACHE")"
-echo -ne "\033[1;32m [3] > " && msg -azu "$(fun_trans "Editar Cliente APACHE") \033[1;31m(comand nano)"
-echo -ne "\033[1;32m [4] > " && msg -azu "$(fun_trans "Iniciar ou Parar  APACHE2") $OPENBAR"
+echo -ne "\033[1;32m [0] > " && msg -bra "$(fun_trans "Kembali ")"
+echo -ne "\033[1;32m [1] > " && msg -azu "$(fun_trans "HAPUS APACHE")"
+echo -ne "\033[1;32m [2] > " && msg -azu "$(fun_trans "EDIT PORT APACHE")"
+echo -ne "\033[1;32m [3] > " && msg -azu "$(fun_trans "Edit Klien APACHE") \033[1;31m(comand nano)"
+echo -ne "\033[1;32m [4] > " && msg -azu "$(fun_trans "Mulai atau Berhenti APACHE2") $OPENBAR"
 msg -bar
 while [[ ${arquivoonlineadm} != @(0|[1-4]) ]]; do
 read -p "[0-4]: " arquivoonlineadm
@@ -179,12 +179,12 @@ tput cuu1 && tput dl1
 done
 case $arquivoonlineadm in
 0)exit;;
-1)remover_apache2;;
+1)hapus_apache2;;
 2)edit_apache;;
 3)
    nano /etc/apache2/ports.conf
    return 0;;
-4)fun_iniciastop;;
+4)fun_initstop;;
 esac
 }
 fun_apache2
