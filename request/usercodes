@@ -1,11 +1,11 @@
 #!/bin/bash
 declare -A TIMEUS
 SCPdir="/etc/newadm"
-SCPusr="${SCPdir}/ger-user"
-MyPID="${SCPusr}/pid-adm"
-MyTIME="${SCPusr}/time-adm"
-USRdatabase="/etc/ADMuser"
-VERY="$(ps aux|grep "${SCPusr}/usercodes verificar"| grep -v grep)"
+SCPusr="${SCPdir}/ger-cr4r"
+MyPID="${SCPusr}/pid-cr4r"
+MyTIME="${SCPusr}/time-cr4r"
+USRdatabase="/etc/CR4Ruser"
+VERY="$(ps aux|grep "${SCPusr}/usercodes verifikasi"| grep -v grep)"
 [[ -e ${MyPID} ]] && source ${MyPID} || touch ${MyPID}
 [[ -e ${MyTIME} ]] && source ${MyTIME} || touch ${MyTIME}
 [[ ! -e ${USRdatabase} ]] && touch ${USRdatabase}
@@ -17,7 +17,7 @@ newclient () {
 #Nome #Senha
 usermod -p $(openssl passwd -1 $2) $1
   while [[ ${newfile} != @(s|S|y|Y|n|N) ]]; do
-   read -p "$(fun_trans "Criar Arquivo Openvpn")? [S/N]: " -e -i S newfile
+   read -p "$(fun_trans "Buat File Openvpn")? [S/N]: " -e -i S newfile
    tput cuu1 && tput dl1
   done
 if [[ ${newfile} = @(s|S) ]]; then
@@ -32,7 +32,7 @@ $(cat /etc/openvpn/client-cert.pem)
 $(cat /etc/openvpn/ca.pem)
 </ca>" >> $HOME/$1.ovpn
   while [[ ${ovpnauth} != @(s|S|y|Y|n|N) ]]; do
-    read -p "$(fun_trans "Colocar Autenticacao de Usuario no Arquivo")? [S/N]: " -e -i S ovpnauth
+    read -p "$(fun_trans "Letakkan Otentikasi Pengguna di File")? [S/N]: " -e -i S ovpnauth
     tput cuu1 && tput dl1
   done
   [[ ${ovpnauth} = @(n|N) ]] && sed -i "s;auth-user-pass;<auth-user-pass>\n$1\n$2\n</auth-user-pass>;g" $HOME/$1.ovpn
@@ -40,15 +40,15 @@ $(cat /etc/openvpn/ca.pem)
   zip ./$1.zip ./$1.ovpn > /dev/null 2>&1
   rm ./$1.ovpn > /dev/null 2>&1
   unzip $HOME/$1.zip > /dev/null 2>&1
-  echo -e "\033[1;31m$(fun_trans "Arquivo Criado em"): ($HOME/$1.zip)"
+  echo -e "\033[1;31m$(fun_trans "File Dibuat di"): ($HOME/$1.zip)"
  fi
 }
 block_userfun () {
-local USRloked="/etc/newadm-userlock"
+local USRloked="/etc/cr4r-userlock"
 local LIMITERLOG="${USRdatabase}/Limiter.log"
 if [[ $2 = "-loked" ]]; then
 [[ $(cat ${USRloked}|grep -w "$1") ]] && return 1
-echo "USER: $1 (LOKED - MULTILOGUIN) $(date +%r)"
+echo "USER: $1 (LOKED - MULTILOGIN) $(date +%r)"
 fi
 if [[ $(cat ${USRloked}|grep -w "$1") ]]; then
 usermod -U "$1" &>/dev/null
@@ -74,38 +74,38 @@ return 0
 fi
 }
 block_user () {
-local USRloked="/etc/newadm-userlock"
+local USRloked="/etc/cr4r-userlock"
 [[ ! -e ${USRloked} ]] && touch ${USRloked}
 usuarios_ativos=($(mostrar_usuarios))
 if [[ -z ${usuarios_ativos[@]} ]]; then
 clear
 clear
 msg -bar
-msg -verm "$(fun_trans "Nenhum Usuario Cadastrado")"
+msg -verm "$(fun_trans "Tidak Ada Pengguna yang Terdaftar")"
 msg -bar
 return 1
 else
 clear
 clear
 msg -bar
-msg -ama "$(fun_trans "Usuarios Atualmente Ativos no Servidor")"
+msg -ama "$(fun_trans "Pengguna Aktif Saat Ini di Server")"
 msg -bar
 Numb=0
 for us in $(echo ${usuarios_ativos[@]}); do
 if [[ $(cat ${USRloked}|grep -w "${us}") ]]; then
-msg -ne "[$Numb] ->" && echo -e "\033[1;33m ${us} \033[1;31mLoked"
+msg -ne "[$Numb] ->" && echo -e "\033[1;33m ${us} \033[1;31mDikunci"
 else
-msg -ne "[$Numb] ->" && echo -e "\033[1;33m ${us} \033[1;32mUnlocked"
+msg -ne "[$Numb] ->" && echo -e "\033[1;33m ${us} \033[1;32mTidak Dikunci"
 fi
 let Numb++
 done
 msg -bar
 fi
-msg -ama "$(fun_trans "Digite ou Selecione um Usuario")"
+msg -ama "$(fun_trans "Masukkan atau Pilih Pengguna")"
 msg -bar
 unset selection
 while [[ ${selection} = "" ]]; do
-echo -ne "\033[1;37mSelect: " && read selection
+echo -ne "\033[1;37mPilih: " && read selection
 tput cuu1 && tput dl1
 done
 if [[ ! $(echo "${selection}" | egrep '[^0-9]') ]]; then
@@ -114,17 +114,17 @@ else
 usuario_del="$selection"
 fi
 [[ -z $usuario_del ]] && {
-     msg -verm "$(fun_trans "Erro, Usuario Invalido")"
+     msg -verm "$(fun_trans "Kesalahan, Pengguna Tidak Valid")"
      msg -bar
      return 1
      }
 [[ ! $(echo ${usuarios_ativos[@]}|grep -w "$usuario_del") ]] && {
-     msg -verm "$(fun_trans "Erro, Usuario Invalido")"
+     msg -verm "$(fun_trans "Kesalahan, Pengguna Tidak Valid")"
      msg -bar
      return 1
      }
-msg -ne "$(fun_trans "Usuario Selecionado"): " && echo -ne "$usuario_del "
-block_userfun "$usuario_del" && msg -verm "[$(fun_trans "Bloqueado")]" || msg -verd "[$(fun_trans "Desbloqueado")]"
+msg -ne "$(fun_trans "Pengguna Terpilih"): " && echo -ne "$usuario_del "
+block_userfun "$usuario_del" && msg -verm "[$(fun_trans "Diblokir")]" || msg -verd "[$(fun_trans "Tidak diblokir")]"
 msg -bar
 }
 add_user () {
@@ -193,7 +193,7 @@ local port_dropbear=`ps aux | grep dropbear | awk NR==1 | awk '{print $17;}'`
 cat /var/log/auth.log|grep "$(date|cut -d' ' -f2,3)" > /var/log/authday.log
 # cat /var/log/auth.log|tail -1000 > /var/log/authday.log
 local log=/var/log/authday.log
-local loginsukses='Password auth succeeded'
+local loginsukses='Password auth sukses'
 [[ -z $port_dropbear ]] && return 1
 for port in `echo $port_dropbear`; do
  for pidx in $(ps ax |grep dropbear |grep "$port" |awk -F" " '{print $1}'); do
@@ -253,19 +253,19 @@ done
 }
 err_fun () {
      case $1 in
-     1)msg -verm "$(fun_trans "Usuario Nulo")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
-     2)msg -verm "$(fun_trans "Usuario Com Nome Muito Curto")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
-     3)msg -verm "$(fun_trans "Usuario Com Nome Muito Grande")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
-     4)msg -verm "$(fun_trans "Senha Nula")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
-     5)msg -verm "$(fun_trans "Senha Muito Curta")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
-     6)msg -verm "$(fun_trans "Senha Muito Grande")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
-     7)msg -verm "$(fun_trans "Duracao Nula")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
-     8)msg -verm "$(fun_trans "Duracao invalida utilize numeros")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
-     9)msg -verm "$(fun_trans "Duracao maxima e de um ano")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
-     11)msg -verm "$(fun_trans "Limite Nulo")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
-     12)msg -verm "$(fun_trans "Limite invalido utilize numeros")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
-     13)msg -verm "$(fun_trans "Limite maximo e de 999")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
-     14)msg -verm "$(fun_trans "Usuario Ja Existe")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     1)msg -verm "$(fun_trans "Pengguna Tidak ada")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     2)msg -verm "$(fun_trans "Nama Pengguna Dengan Nama Terlalu Pendek")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     3)msg -verm "$(fun_trans "Pengguna Dengan Nama Terlalu Panjang")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     4)msg -verm "$(fun_trans "kata sandi tidak ada")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     5)msg -verm "$(fun_trans "Kata Sandi Sangat Pendek")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     6)msg -verm "$(fun_trans "kata sandi yang sangat panjang")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     7)msg -verm "$(fun_trans "durasi tidak ada")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     8)msg -verm "$(fun_trans "Durasi tidak valid")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     9)msg -verm "$(fun_trans "Durasi maksimum adalah satu tahun")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     11)msg -verm "$(fun_trans "Batas tidak ada")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     12)msg -verm "$(fun_trans "Batas penggunaan tidak valid")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     13)msg -verm "$(fun_trans "Batas maksimum adalah 999")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
+     14)msg -verm "$(fun_trans "Pengguna sudah ada")"; sleep 2s; tput cuu1; tput dl1; tput cuu1; tput dl1;;
      esac
 }
 new_user () {
@@ -274,13 +274,13 @@ if [[ -z ${usuarios_ativos[@]} ]]; then
 clear
 clear
 msg -bar
-msg -verm "$(fun_trans "Nenhum Usuario Cadastrado")"
+msg -verm "$(fun_trans "Tidak Ada Pengguna Terdaftar")"
 msg -bar
 else
 clear
 clear
 msg -bar
-msg -ama "$(fun_trans "Usuarios Atualmente Ativos no Servidor")"
+msg -ama "$(fun_trans "Pengguna Aktif Saat Ini di Server")"
 msg -bar
 for us in $(echo ${usuarios_ativos[@]}); do
 msg -ne "User: " && echo "${us}"
@@ -288,7 +288,7 @@ done
 msg -bar
 fi
 while true; do
-     msg -ne "$(fun_trans "Nome Do Novo Usuario")"
+     msg -ne "$(fun_trans "Username baru")"
      read -p ": " nomeuser
      nomeuser="$(echo $nomeuser|sed -e 's/[^a-z0-9 -]//ig')"
      if [[ -z $nomeuser ]]; then
@@ -303,7 +303,7 @@ while true; do
      break
 done
 while true; do
-     msg -ne "$(fun_trans "Senha Novo Usuario")"
+     msg -ne "$(fun_trans "Kata Sandi Pengguna Baru")"
      read -p ": " senhauser
      if [[ -z $senhauser ]]; then
      err_fun 4 && continue
@@ -315,7 +315,7 @@ while true; do
      break
 done
 while true; do
-     msg -ne "$(fun_trans "Tempo de Duracao do Novo Usuario")"
+     msg -ne "$(fun_trans "Durasi User Baru")"
      read -p ": " diasuser
      if [[ -z "$diasuser" ]]; then
      err_fun 7 && continue
@@ -327,7 +327,7 @@ while true; do
      break
 done
 while true; do
-     msg -ne "$(fun_trans "Limite de Conexao do Novo Usuario")"
+     msg -ne "$(fun_trans "Batas Koneksi User Baru")"
      read -p ": " limiteuser
      if [[ -z "$limiteuser" ]]; then
      err_fun 11 && continue
@@ -345,16 +345,16 @@ done
      clear
      clear
      msg -bar
-     msg -ama "$(fun_trans "DETALHES DO USUARIO")"
+     msg -ama "$(fun_trans "RINCIAN PENGGUNA")"
      msg -bar
-     msg -ne "$(fun_trans "IP do Servidor"): " && echo -e "$(meu_ip)"
-     msg -ne "$(fun_trans "Usuario"): " && echo -e "$nomeuser"
-     msg -ne "$(fun_trans "Senha"): " && echo -e "$senhauser"
-     msg -ne "$(fun_trans "Dias de Duracao"): " && echo -e "$diasuser"
-     msg -ne "$(fun_trans "Data de Expiracao"): " && echo -e "$(date "+%F" -d " + $diasuser days")"
-     msg -ne "$(fun_trans "Limite de Conexao"): " && echo -e "$limiteuser"
+     msg -ne "$(fun_trans "IP Server"): " && echo -e "$(meu_ip)"
+     msg -ne "$(fun_trans "Pengguna"): " && echo -e "$nomeuser"
+     msg -ne "$(fun_trans "Passowrd"): " && echo -e "$senhauser"
+     msg -ne "$(fun_trans "Durasi hari"): " && echo -e "$diasuser"
+     msg -ne "$(fun_trans "Tanggal habis tempo"): " && echo -e "$(date "+%F" -d " + $diasuser hari")"
+     msg -ne "$(fun_trans "Limt User"): " && echo -e "$limiteuser"
 msg -bar
-add_user "${nomeuser}" "${senhauser}" "${diasuser}" "${limiteuser}" && msg -ama "$(fun_trans "Usuario Criado Com Sucesso")" || msg -verm "$(fun_trans "Erro, Usuario nao criado")"
+add_user "${nomeuser}" "${senhauser}" "${diasuser}" "${limiteuser}" && msg -ama "$(fun_trans "Pengguna Berhasil Dibuat")" || msg -verm "$(fun_trans "Error, Pengguna tidak dibuat")"
 [[ $(dpkg --get-selections|grep -w "openvpn"|head -1) ]] && [[ -e /etc/openvpn/openvpn-status.log ]] && newclient "$nomeuser" "$senhauser"
 msg -bar
 }
@@ -364,14 +364,14 @@ if [[ -z ${usuarios_ativos[@]} ]]; then
 clear
 clear
 msg -bar
-msg -verm "$(fun_trans "Nenhum Usuario Cadastrado")"
+msg -verm "$(fun_trans "Tidak Ada Pengguna Terdaftar")"
 msg -bar
 return 1
 else
 clear
 clear
 msg -bar
-msg -ama "$(fun_trans "Usuarios Atualmente Ativos no Servidor")"
+msg -ama "$(fun_trans "Pengguna Aktif Saat Ini di Server")"
 msg -bar
 i=0
 for us in $(echo ${usuarios_ativos[@]}); do
@@ -380,11 +380,11 @@ let i++
 done
 msg -bar
 fi
-msg -ama "$(fun_trans "Digite ou Selecione um Usuario")"
+msg -ama "$(fun_trans "Masukkan atau Pilih Pengguna")"
 msg -bar
 unset selection
 while [[ -z ${selection} ]]; do
-echo -ne "\033[1;37m$(fun_trans "Selecione A Opcao"): " && read selection
+echo -ne "\033[1;37m$(fun_trans "Pilih opsi"): " && read selection
 tput cuu1 && tput dl1
 done
 if [[ ! $(echo "${selection}" | egrep '[^0-9]') ]]; then
@@ -393,17 +393,17 @@ else
 usuario_del="$selection"
 fi
 [[ -z $usuario_del ]] && {
-     msg -verm "$(fun_trans "Erro, Usuario Invalido")"
+     msg -verm "$(fun_trans "Kesalahan, Pengguna Tidak Valid")"
      msg -bar
      return 1
      }
 [[ ! $(echo ${usuarios_ativos[@]}|grep -w "$usuario_del") ]] && {
-     msg -verm "$(fun_trans "Erro, Usuario Invalido")"
+     msg -verm "$(fun_trans "Kesalahan, Pengguna Tidak Valid")"
      msg -bar
      return 1
      }
-msg -ne "$(fun_trans "Usuario Selecionado"): " && echo -ne "$usuario_del"
-rm_user "$usuario_del" && msg -verd " [$(fun_trans "Removido")]" || msg -verm " [$(fun_trans "Nao Removido")]"
+msg -ne "$(fun_trans "Pengguna Dipilih"): " && echo -ne "$usuario_del"
+rm_user "$usuario_del" && msg -verd " [$(fun_trans "Hapus")]" || msg -verm " [$(fun_trans "Tidak Dihapus")]"
 msg -bar
 }
 renew_user () {
@@ -412,14 +412,14 @@ if [[ -z ${usuarios_ativos[@]} ]]; then
 clear
 clear
 msg -bar
-msg -verm "$(fun_trans "Nenhum Usuario Cadastrado")"
+msg -verm "$(fun_trans "Tidak Ada Pengguna Terdaftar")"
 msg -bar
 return 1
 else
 clear
 clear
 msg -bar
-msg -ama "$(fun_trans "Usuarios Atualmente Ativos no Servidor")"
+msg -ama "$(fun_trans "Pengguna Aktif Saat Ini di Server")"
 msg -bar
 i=0
 for us in $(echo ${usuarios_ativos[@]}); do
@@ -428,11 +428,11 @@ let i++
 done
 msg -bar
 fi
-msg -ama "$(fun_trans "Digite ou Selecione um Usuario")"
+msg -ama "$(fun_trans "Masukkan atau Pilih Pengguna")"
 msg -bar
 unset selection
 while [[ -z ${selection} ]]; do
-echo -ne "\033[1;37m$(fun_trans "Selecione A Opcao"): " && read selection
+echo -ne "\033[1;37m$(fun_trans "Pilih opsi"): " && read selection
 tput cuu1
 tput dl1
 done
@@ -442,17 +442,17 @@ else
 useredit="$selection"
 fi
 [[ -z $useredit ]] && {
-     msg -verm "$(fun_trans "Erro, Usuario Invalido")"
+     msg -verm "$(fun_trans "Kesalahan, Pengguna Tidak Valid")"
      msg -bar
      return 1
      }
 [[ ! $(echo ${usuarios_ativos[@]}|grep -w "$useredit") ]] && {
-     msg -verm "$(fun_trans "Erro, Usuario Invalido")"
+     msg -verm "$(fun_trans "Kesalahan, Pengguna Tidak Valid")"
      msg -bar
      return 1
      }
 while true; do
-     msg -ne "$(fun_trans "Novo Tempo de Duracao de") $useredit"
+     msg -ne "$(fun_trans "Durasi Baru") $useredit"
      read -p ": " diasuser
      if [[ -z "$diasuser" ]]; then
      err_fun 7 && continue
@@ -464,7 +464,7 @@ while true; do
      break
 done
 msg -bar
-renew_user_fun "${useredit}" "${diasuser}" && msg -ama "$(fun_trans "Usuario Modificado Com Sucesso")" || msg -verm "$(fun_trans "Erro, Usuario nao Modificado")"
+renew_user_fun "${useredit}" "${diasuser}" && msg -ama "$(fun_trans "Pengguna Berhasil Dimodifikasi")" || msg -verm "$(fun_trans "Error, Pengguna Tidak Dimodifikasi")"
 msg -bar
 }
 edit_user () {
@@ -473,14 +473,14 @@ if [[ -z ${usuarios_ativos[@]} ]]; then
 clear
 clear
 msg -bar
-msg -verm "$(fun_trans "Nenhum Usuario Cadastrado")"
+msg -verm "$(fun_trans "Tidak Ada Pengguna Terdaftar")"
 msg -bar
 return 1
 else
 clear
 clear
 msg -bar
-msg -ama "$(fun_trans "Usuarios Atualmente Ativos no Servidor")"
+msg -ama "$(fun_trans "Pengguna Aktif Saat Ini di Server")"
 msg -bar
 i=0
 for us in $(echo ${usuarios_ativos[@]}); do
@@ -489,11 +489,11 @@ let i++
 done
 msg -bar
 fi
-msg -ama "$(fun_trans "Digite ou Selecione um Usuario")"
+msg -ama "$(fun_trans "Masukkan atau Pilih Pengguna")"
 msg -bar
 unset selection
 while [[ -z ${selection} ]]; do
-echo -ne "\033[1;37m$(fun_trans "Selecione A Opcao"): " && read selection
+echo -ne "\033[1;37m$(fun_trans "Pilih Opsi"): " && read selection
 tput cuu1; tput dl1
 done
 if [[ ! $(echo "${selection}" | egrep '[^0-9]') ]]; then
@@ -502,18 +502,18 @@ else
 useredit="$selection"
 fi
 [[ -z $useredit ]] && {
-     msg -verm "$(fun_trans "Erro, Usuario Invalido")"
+     msg -verm "$(fun_trans "Kesalahan, Pengguna Tidak Valid")"
      msg -bar
      return 1
      }
 [[ ! $(echo ${usuarios_ativos[@]}|grep -w "$useredit") ]] && {
-     msg -verm "$(fun_trans "Erro, Usuario Invalido")"
+     msg -verm "$(fun_trans "Kesalahan, Pengguna Tidak Valid")"
      msg -bar
      return 1
      }
 while true; do
-msg -ne "$(fun_trans "Usuario Selecionado"): " && echo -e "$useredit"
-     msg -ne "$(fun_trans "Nova Senha de"): $useredit"
+msg -ne "$(fun_trans "Pengguna"): " && echo -e "$useredit"
+     msg -ne "$(fun_trans "kata sandi baru"): $useredit"
      read -p ": " senhauser
      if [[ -z "$senhauser" ]]; then
      err_fun 4 && continue
@@ -525,7 +525,7 @@ msg -ne "$(fun_trans "Usuario Selecionado"): " && echo -e "$useredit"
      break
 done
 while true; do
-     msg -ne "$(fun_trans "Dias de Duracao de"): $useredit"
+     msg -ne "$(fun_trans "Durasi hari"): $useredit"
      read -p ": " diasuser
      if [[ -z "$diasuser" ]]; then
      err_fun 7 && continue
@@ -537,7 +537,7 @@ while true; do
      break
 done
 while true; do
-     msg -ne "$(fun_trans "Novo Limite de Conexao de"): $useredit"
+     msg -ne "$(fun_trans "Batas Koneksi Baru"): $useredit"
      read -p ": " limiteuser
      if [[ -z "$limiteuser" ]]; then
      err_fun 11 && continue
@@ -552,13 +552,13 @@ done
      tput cuu1 && tput dl1
      tput cuu1 && tput dl1
      tput cuu1 && tput dl1
-     msg -ne "$(fun_trans "Usuario"): " && echo -e "$useredit"
-     msg -ne "$(fun_trans "Senha"): " && echo -e "$senhauser"
-     msg -ne "$(fun_trans "Dias de Duracao"): " && echo -e "$diasuser"
-     msg -ne "$(fun_trans "Data de Expiracao"): " && echo -e "$(date "+%F" -d " + $diasuser days")"
-     msg -ne "$(fun_trans "Limite de Conexao"): " && echo -e "$limiteuser"
+     msg -ne "$(fun_trans "Pengguna"): " && echo -e "$useredit"
+     msg -ne "$(fun_trans "Kata sandi"): " && echo -e "$senhauser"
+     msg -ne "$(fun_trans "Durasi"): " && echo -e "$diasuser"
+     msg -ne "$(fun_trans "Tanggal habis tempo"): " && echo -e "$(date "+%F" -d " + $diasuser days")"
+     msg -ne "$(fun_trans "Limit User"): " && echo -e "$limiteuser"
 msg -bar
-edit_user_fun "${useredit}" "${senhauser}" "${diasuser}" "${limiteuser}" && msg -ama "$(fun_trans "Usuario Modificado Com Sucesso")" || msg -verm "$(fun_trans "Erro, Usuario nao Modificado")"
+edit_user_fun "${useredit}" "${senhauser}" "${diasuser}" "${limiteuser}" && msg -ama "$(fun_trans "Pengguna Berhasil Dimodifikasi")" || msg -verm "$(fun_trans "Error, Pengguna Tidak Dimodifikasi")"
 msg -bar
 }
 detail_user () {
@@ -569,8 +569,8 @@ if [[ ! -e "${USRdatabase}" ]]; then
 clear
 clear
 msg -bar
-msg -verm "$(fun_trans "Nao Foi Identificado uma Database Com Usuarios")"
-msg -verm "$(fun_trans "Os Usuarios a Seguir Nao Contem Nenhuma Informacao")"
+msg -verm "$(fun_trans "Tidak Ada Database Dengan Pengguna yang Dicari")"
+msg -verm "$(fun_trans "Pengguna berikut tidak mengandung informasi apa pun")"
 msg -bar2
 fi
 clear
@@ -609,7 +609,7 @@ echo -e "$txtvar"
 done <<< "$(mostrar_usuarios)"
 msg -bar2
 _total=$(awk  -F : '$3 >= 500 {print  $1}'  /etc/passwd | grep -v "nobody" | sort | wc -l)
-echo -e " Você Tem: $_total Usuarios Em Seu Servidor"
+echo -e " Anda Memiliki: $_total Pengguna Di Server Anda"
 msg -bar2
 }
 monit_user () {
@@ -618,7 +618,7 @@ gren=$(tput setaf 2)
 clear
 clear
 msg -bar
-msg -verm "$(fun_trans "Monitor de Conexoes de Usuarios")"
+msg -verm "$(fun_trans "Monitor Koneksi Pengguna")"
 msg -bar
 txtvar=$(printf '%-13s' "USER")
 txtvar+=$(printf '%-19s' "CONNECTION")
@@ -661,7 +661,7 @@ sleep 1s
 done
 msg -bar
 _total=$(awk  -F : '$3 >= 500 {print  $1}'  /etc/passwd | grep -v "nobody" | sort | wc -l)
-echo -e " Você Tem: $_total Usuarios Em Seu Servidor"
+echo -e " Você Tem: $_total Pengguna di Server Anda"
 msg -bar
 }
 rm_vencidos () {
@@ -672,10 +672,10 @@ txtvar=$(printf '%-25s' "USER")
 txtvar+=$(printf '%-20s' "VALID")
 echo -e "\033[1;33m${txtvar}"
 msg -bar
-expired="${red}$(fun_trans "Expirado")"
-valid="${gren}$(fun_trans "Usuario Valido")"
-never="${yellow}$(fun_trans "Usuario Ilimitado")"
-removido="${red}$(fun_trans "Removido")"
+expired="${red}$(fun_trans "Expired")"
+valid="${gren}$(fun_trans "Pengguna yang Sah")"
+never="${yellow}$(fun_trans "Pengguna Tidak Terbatas")"
+removido="${red}$(fun_trans "Hapus")"
 DataVPS=$(date +%s)
 while read user; do
 DataUser=$(chage -l "${user}" |grep -i co|awk -F ":" '{print $2}')
@@ -718,19 +718,19 @@ verif_fun () {
     while read user; do
            echo -ne "\033[1;33mUSUARIO: \033[1;32m$user "
            if [[ ! $(echo $(mostrar_usuarios)|grep -w "$user") ]]; then
-              echo -e "\033[1;31mNAO EXISTE"
+              echo -e "\033[1;31mTIDAK ADA"
               continue
            fi
            local DataUser=$(chage -l "${user}" |grep -i co|awk -F ":" '{print $2}')
            if [[ ! -z "$(echo $DataUser|grep never)" ]]; then
-               echo -e "\033[1;31mILIMITADO" 
+               echo -e "\033[1;31mTAK TERBATAS" 
                continue
            fi
            local DataSEC=$(date +%s --date="$DataUser")
            if [[ "$DataSEC" -lt "$TimeNOW" ]]; then
               EXPIRED="1+"          
               block_userfun $user -loked && echo "USER: $user (LOKED - EXPIRED) $(date +%r)" >> $LIMITERLOG
-              echo -e "\033[1;31m EXPIRADO"
+              echo -e "\033[1;31m Expired"
               continue
            fi
            local PID="0+"
@@ -753,10 +753,10 @@ verif_fun () {
            if [[ "${conexao[$user]}" -gt "${limite[$user]}" ]]; then
            local lock=$(block_userfun $user -loked)
            echo "$lock" >> $LIMITERLOG
-           echo -e "\033[1;31m ULTRAPASSOU LIMITE"
+           echo -e "\033[1;31m MELEBIHI BATAS"
            continue
            fi
-           echo -e "\033[1;33m OK! \033[1;31m${conexao[$user]} CONEXOES"
+           echo -e "\033[1;33m OK! \033[1;31m${conexao[$user]} KONEKSI"
     done <<< "$(mostrar_usuarios)"
     echo "${ONLINES}0"|bc > ${SCPdir}/USRonlines
     echo "${EXPIRED}0"|bc > ${SCPdir}/USRexpired
@@ -769,25 +769,25 @@ backup_fun () {
 clear
 clear
 msg -bar
-msg -ama "$(fun_trans "FERRAMENTA DE BACKUP DE USUARIOS")"
-# msg -ama "$(fun_trans "Backup Local"): \033[1;31m[ \033[1;32m/root/Backup-adm \033[1;31m]"
+msg -ama "$(fun_trans "ALAT CADANGAN PENGGUNA")"
+# msg -ama "$(fun_trans "Backup Local"): \033[1;31m[ \033[1;32m/root/Backup-cr4r \033[1;31m]"
 msg -bar
-menu_func "CRIAR BACKUP" "RESTAURAR BACKUP"
+menu_func "CRIAR BACKUP" "Kembalikan cadangan"
 msg -bar
 unset selection
 while [[ ${selection} != @([1-2]) ]]; do
-echo -ne "\033[1;37m$(fun_trans "Selecione A Opcao"): " && read selection
+echo -ne "\033[1;37m$(fun_trans "Pilih opsi"): " && read selection
 tput cuu1 && tput dl1
 done
 case ${selection} in
 1)
-cp ${USRdatabase} $HOME/Backup-adm
-msg -azu "$(fun_trans "Procedimento Feito")"
-echo -e "\033[1;31mBACKUP > \033[1;31m[ \033[1;32m$HOME/Backup-adm \033[1;31m]"
+cp ${USRdatabase} $HOME/Backup-cr4r
+msg -azu "$(fun_trans "Prosedur Selesai")"
+echo -e "\033[1;31mBACKUP > \033[1;31m[ \033[1;32m$HOME/Backup-cr4r \033[1;31m]"
 ;;
 2)
 while [[ ! -e ${dirbackup} ]]; do
-echo -ne "\033[1;37m$(fun_trans "Digite o Local Do Backup-adm"): " && read dirbackup
+echo -ne "\033[1;37m$(fun_trans "Masukkan Lokasi Backup-cr4r"): " && read dirbackup
 tput cuu1 && tput dl1
 done
 VPSsec=$(date +%s)
@@ -809,10 +809,10 @@ esac
 msg -bar
 }
 verif_funx () {
-PIDVRF="$(ps aux|grep "${SCPusr}/usercodes verificar"|grep -v grep|awk '{print $2}')"
+PIDVRF="$(ps aux|grep "${SCPusr}/usercodes verifikasi"|grep -v grep|awk '{print $2}')"
 if [[ -z $PIDVRF ]]; then
 cd ${SCPusr}
-screen -dmS very ${SCPusr}/usercodes verificar
+screen -dmS very ${SCPusr}/usercodes verifikasi
 else
 for pid in $(echo $PIDVRF); do
 kill -9 $pid &>/dev/null
@@ -836,15 +836,15 @@ msg -bar
 # msg -verd "$(fun_trans "Bem vindo esse e o instalador do banner")"
 msg -ama "$(fun_trans "INSTALADOR DO BANNER")"
 msg -bar
-msg -ne "$(fun_trans "digite a mensagem principal do banner"): " && read ban_ner
+msg -ne "$(fun_trans "Masukkan pesan utama spanduk"): " && read ban_ner
 msg -bar
-echo -e " \033[1;32m[1] >\033[1;32m $(fun_trans "Verde")"
-echo -e " \033[1;32m[2] >\033[1;31m $(fun_trans "Vermelho")"
-echo -e " \033[1;32m[3] >\033[1;34m $(fun_trans "Azul")"
-echo -e " \033[1;32m[4] >\033[1;33m $(fun_trans "Amarelo")"
-echo -e " \033[1;32m[5] >\033[1;35m $(fun_trans "Roxo")"
+echo -e " \033[1;32m[1] >\033[1;32m $(fun_trans "Hijau")"
+echo -e " \033[1;32m[2] >\033[1;31m $(fun_trans "merah")"
+echo -e " \033[1;32m[3] >\033[1;34m $(fun_trans "Biru")"
+echo -e " \033[1;32m[4] >\033[1;33m $(fun_trans "Kuning")"
+echo -e " \033[1;32m[5] >\033[1;35m $(fun_trans "Ungu")"
 msg -bar
-msg -ne "$(fun_trans "Perfeito Agora a Cor"): " && read ban_ner_cor
+msg -ne "$(fun_trans "Pilih Warna"): " && read ban_ner_cor
 echo '<h1><font>=============================</font></h1>' > $local
 if [[ "$ban_ner_cor" = "1" ]]; then
 echo '<h1><font color="green">' >> $local
@@ -864,15 +864,15 @@ echo '</font></h1>' >> $local
 echo '<h1><font>=============================</font></h1>' >> $local
 txt_font () {
 msg -bar
-msg -ne "$(fun_trans "digite a mensagem secundaria"): " && read ban_ner2
+msg -ne "$(fun_trans "Masukkan pesan sekunder"): " && read ban_ner2
 msg -bar
-echo -e " \033[1;32m[1] >\033[1;32m $(fun_trans "Verde")"
-echo -e " \033[1;32m[2] >\033[1;31m $(fun_trans "Vermelho")"
-echo -e " \033[1;32m[3] >\033[1;34m $(fun_trans "Azul")"
-echo -e " \033[1;32m[4] >\033[1;33m $(fun_trans "Amarelo")"
-echo -e " \033[1;32m[5] >\033[1;35m $(fun_trans "Roxo")"
+echo -e " \033[1;32m[1] >\033[1;32m $(fun_trans "Hijau")"
+echo -e " \033[1;32m[2] >\033[1;31m $(fun_trans "merah")"
+echo -e " \033[1;32m[3] >\033[1;34m $(fun_trans "Biru")"
+echo -e " \033[1;32m[4] >\033[1;33m $(fun_trans "Kuning")"
+echo -e " \033[1;32m[5] >\033[1;35m $(fun_trans "Ungu")"
 msg -bar
-msg -ne "$(fun_trans "Perfeito Agora a Cor"): " && read ban_ner2_cor
+msg -ne "$(fun_trans "Pilih Warna"): " && read ban_ner2_cor
 if [ "$ban_ner2_cor" = "1" ]; then
 echo '<h6><font color="green">' >> $local
 elif [ "$ban_ner2_cor" = "2" ]; then
@@ -891,7 +891,7 @@ echo "</h6></font>" >> $local
 }
 while true; do
 msg -bar
-msg -ne "$(fun_trans "Adicionar Mensagem Secundaria")? [S/N]: " && read sin_nao
+msg -ne "$(fun_trans "Tambahkan Pesan Sekunder")? [S/N]: " && read sin_nao
 if [[ "$sin_nao" = @(s|S|y|Y) ]]; then
 txt_font
 elif [[ "$sin_nao" = @(n|N) ]]; then
@@ -904,7 +904,7 @@ if [[ -e "$local2" ]]; then
 rm $local2  > /dev/null 2>&1
 cp $local $local2 > /dev/null 2>&1
 fi
-msg -bar && msg -verd "$(fun_trans "Banner Adicionado Com Sucesso")" && msg -bar
+msg -bar && msg -verd "$(fun_trans "Spanduk Berhasil Ditambah")" && msg -bar
 service ssh restart > /dev/null 2>&1 &
 service sshd restart > /dev/null 2>&1 & 
 service dropbear restart > /dev/null 2>&1 &
@@ -914,16 +914,16 @@ service dropbear restart > /dev/null 2>&1 &
 clear
 clear
 msg -bar
-if [[ "$1" = "verificar" ]]; then
+if [[ "$1" = "verifikasi" ]]; then
 verif_fun
 exit
 fi
-[[ -z ${VERY} ]] && verificar="\033[1;31m[Off]" || verificar="\033[1;32m[On]"
-msg -ama "$(fun_trans "GERENCIAMENTO DE USUARIOS*")"
+[[ -z ${VERY} ]] && verifikasi="\033[1;31m[Off]" || verifikasi="\033[1;32m[On]"
+msg -ama "$(fun_trans "MANAJEMEN PENGGUNA*")"
 msg -bar
-echo -ne "$(msg -verd "[0]") $(msg -verm2 ">") " && msg -bra "$(fun_trans "VOLTAR*")"
-menu_func "CRIAR NOVO USUARIO*" "REMOVER USUARIO*" "BLOQUEAR OU DESBLOQUEAR USUARIO*" "EDITAR USUARIO*" "RENOVAR FECHA USUARIO*" "DETALHES DE TODOS USUARIOS*" "MONITORAR USUARIOS CONECTADOS*" "ELIMINAR USUARIOS EXPIRADOS*" "BACKUP USUARIOS*" "BANNER SSH*" "-fi ${verificar} VERIFICACOES*"
-[[ -e "${SCPusr}/Limiter.log" ]] && echo -ne "$(msg -verd "[12]") $(msg -verm2 ">") " && msg -azu "$(fun_trans "VER LOG DO LIMITER*")"
+echo -ne "$(msg -verd "[0]") $(msg -verm2 ">") " && msg -bra "$(fun_trans "Kembali*")"
+menu_func "BUAT PENGGUNA BARU*" "HAPUS PENGGUNA*" "BLOKIR ATAU BUKA PENGGUNA*" "EDIT PENGGUNA*" "PERBARUI TUTUP PENGGUNA*" "RINCIAN DARI SEMUA PENGGUNA*" "MONITOR PENGGUNA TERHUBUNG*" "HAPUS PENGGUNA YANG EXPIRED*" "CADANGANKAN PENGGUNA*" "BANNER SSH*" "-fi ${verifikasi} VERIFIKASI*"
+[[ -e "${SCPusr}/Limiter.log" ]] && echo -ne "$(msg -verd "[12]") $(msg -verm2 ">") " && msg -azu "$(fun_trans "LIHAT LOG PEMBATAS*")"
 msg -bar
 selection=$(selection_fun 12)
 case ${selection} in
