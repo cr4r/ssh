@@ -190,6 +190,7 @@ invalid_key () {
 }
 Key="qra-atsilK?29@%6087%?88d5K8888:%05+08+@@?+91"
 REQUEST="https://raw.githubusercontent.com/cr4r/ssh/main/request"
+# https://raw.githubusercontent.com/cr4r/ssh/main/request
 echo "$IP" > /usr/bin/vendor_code
 cd $HOME
 msg -ne "Files: "
