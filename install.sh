@@ -159,7 +159,7 @@ verificar_arq () {
 
 # Instalasi Dimulai
 fun_ip
-wget -O /usr/bin/trans https://raw.githubusercontent.com/cr4r/ssh/main/Install/trans &> /dev/null
+wget -O /usr/bin/trans https://raw.githubusercontent.com/cr4r/ssh/main/Install/trans &> /dev/null && chmod +x /usr/bin/trans
 clear
 msg -bar2
 msg -ama "[ VPN - SSH - CR4R ]    \033[1;37m@cr4r"
@@ -196,7 +196,6 @@ if [[ -e $HOME/lista-req ]] && [[ ! $(cat $HOME/lista-req|grep "Key Salah!") ]];
     stopping="$(source trans -b pt:${id} "Memeriksa Pembaruan"|sed -e 's/[^a-z -]//ig')"
     for arqx in $(cat $HOME/lista-req); do
         msg -verm "${stopping}${pontos}"
-        msg -ama "${SCPinstal}/${arqx} ${REQUEST}/${arqx}"
         wget -O ${SCPinstal}/${arqx} ${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
         tput cuu1 && tput dl1
         pontos+="."
@@ -215,7 +214,7 @@ if [[ -e $HOME/lista-req ]] && [[ ! $(cat $HOME/lista-req|grep "Key Salah!") ]];
     inst_components
     echo "$Key" > ${SCPdir}/key.txt
     [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}
-    [[ ${#id} -gt 2 ]] && echo "id" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
+    [[ ${#id} -gt 2 ]] && echo "id" > ${SCPbahasa} || echo "${id}" > ${SCPbahasa}
     [[ ${byinst} = "true" ]] && install_fim
 else
     invalid_key

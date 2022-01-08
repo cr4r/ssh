@@ -97,9 +97,9 @@ local LINGUAGE=$(cat ${SCPbahasa})
 source /etc/texto-cr4r
 if [[ -z "$(echo ${texto[$@]})" ]]; then
 if [[ `echo "$@" | grep -o '*'` = "*" ]]; then
-retorno="$(source trans -e bing -b pt:${LINGUAGE} "$@"|sed -e 's/[^a-z0-9 -]//ig'| awk '{print toupper($0)}' 2>/dev/null)"
+retorno="$(source trans -e google -b pt:${LINGUAGE} "$@"|sed -e 's/[^a-z0-9 -]//ig'| awk '{print toupper($0)}' 2>/dev/null)"
 else
-retorno="$(source trans -e bing -b pt:${LINGUAGE} "$@"|sed -e 's/[^a-z0-9 -]//ig' 2>/dev/null)"
+retorno="$(source trans -e google -b pt:${LINGUAGE} "$@"|sed -e 's/[^a-z0-9 -]//ig' 2>/dev/null)"
 fi
 echo "texto[$@]='$retorno'"  >> /etc/texto-cr4r
 echo "$retorno"
