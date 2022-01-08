@@ -196,6 +196,7 @@ if [[ -e $HOME/lista-req ]] && [[ ! $(cat $HOME/lista-req|grep "Key Salah!") ]];
     stopping="$(source trans -b pt:${id} "Memeriksa Pembaruan"|sed -e 's/[^a-z -]//ig')"
     for arqx in $(cat $HOME/lista-req); do
         msg -verm "${stopping}${pontos}"
+        msg -ama "${SCPinstal}/${arqx} ${REQUEST}/${arqx}"
         wget -O ${SCPinstal}/${arqx} ${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
         tput cuu1 && tput dl1
         pontos+="."
