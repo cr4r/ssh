@@ -3,10 +3,11 @@ red=$(tput setaf 1)
 gren=$(tput setaf 2)
 yellow=$(tput setaf 3)
 SCPdir="/etc/cr4r" && [[ ! -d ${SCPdir} ]] && exit 1
-SCPusr="${SCPdir}/ger-user" && [[ ! -d ${SCPusr} ]] && mkdir ${SCPusr}
+SCPusr="${SCPdir}/user" && [[ ! -d ${SCPusr} ]] && mkdir ${SCPusr}
 SCPfrm="/etc/ger-frm" && [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
-SCPinst="/etc/ger-inst" && [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
+SCPinst="/etc/inst" && [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
 SCPbahasa="${SCPdir}/bahasa"
+
 echo "pt" > /etc/cr4r/bahasa #FUNCAO BAHASA PORTUGUES
 _total=$(awk  -F : '$3 >= 500 {print  $1}'  /etc/passwd | grep -v "nobody" | sort | wc -l)
 [[ -e /etc/cr4r/ger-user/Limiter.log ]] && log=$(echo -e "\033[1;32m[LOG] ") || log=$(echo -e "\033[1;31m[NO LOG] ")
@@ -121,7 +122,7 @@ if [[ $Key = @(s|S|y|Y) ]]; then
 msg -verm "$(fun_trans "Memulai update"): "
 [[ -e $HOME/instalar.sh ]] && rm $HOME/instalar.sh*
 [[ -e $HOME/lista-req ]] && rm $HOME/lista-req*
-[[ -e $HOME/versao ]] && rm $HOME/versao*
+[[ -e $HOME/versi ]] && rm $HOME/versi*
 wget -O $HOME/instalar.sh https://raw.githubusercontent.com/cr4r/ssh/main/install.sh &>/dev/null
 chmod +x $HOME/instalar.s*
 local LINGUAGE=$(cat ${SCPbahasa})
@@ -676,7 +677,7 @@ case $1 in
 "optimizar.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "$(fun_trans "OPTIMALKAN Sistem*") $dev";;
 "fai2ban.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "$(fun_trans "Proteksi FAIL2BAN*") $dev";;
 "paysnd.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "PAYLOAD $(fun_trans "Bruto Force*") $dev";;
-# Menu Instala��o Ger-Inst
+# Menu Instala��o inst
 "apache2.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "APACHE2 $(pid_inst apache2)";;
 "openssh.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "OPENSSH $(pid_inst sshd)";;
 "squid.sh")echo -ne "$(msg -verd "[$2]") $(msg -verm2 ">") " && msg -azu "SQUID $(pid_inst squid)";;
@@ -854,7 +855,7 @@ msg -bar
 msg -ama "${vesaoSCT}"
 msg -bar
 menu_info
-# msg -bar
+msg -bar
 # msg -ne "$(fun_trans "Sistem*"): " && echo -ne "\033[1;37m$(os_system)  "
 # msg -ne "$(fun_trans "IP*"): " && echo -e "\033[1;37m$(meu_ip)"
 [[ -e ${SCPdir}/USRonlines ]] && msg -bar && msg -ne "$(fun_trans "ONLINE*"): " && echo -ne "\033[1;37m$(cat ${SCPdir}/USRonlines) $(fun_trans "pengguna")  "

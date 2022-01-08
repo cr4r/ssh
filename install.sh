@@ -8,9 +8,10 @@ SCPbahasa="${SCPdir}/bahasa"
 SCPusr="${SCPdir}/user"
 SCPfrm="/etc/ger-frm"
 # SCPinst="/etc/ger-inst"
-SCPinst="/etc/instalasi"
-# SCPresq="aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0FBQUFBRVhRT1N5SXBOMkpaMGVoVVEvQURNLVVMVElNQVRFLU5FVy1GUkVFL21hc3Rlci9yZXF1ZXN0"
-# SUB_DOM='base64 -d'
+SCPinst="/etc/inst"
+
+SCPresq="aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NyNHIvc3NoL21haW4vcmVxdWVzdA=="
+SUB_DOM='base64 -d'
 [[ $(dpkg --get-selections|grep -w "gawk"|head -1) ]] || apt-get install gawk -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "mlocate"|head -1) ]] || apt-get install mlocate -y &>/dev/null
 rm $(pwd)/$0 &> /dev/null
@@ -36,9 +37,9 @@ fun_ip () {
 }
 
 inst_components () {
-    msg -ama "Sedang memeriksa plugin yang dibutuhkan"
-    [[ $(dpkg --get-selections|grep -w "nano"|head -1) ]] || apt-get install nano -y &>/dev/null
+    msg -ama "Menginstall plugin yang diperlukan"
     [[ $(dpkg --get-selections|grep -w "iproute2"|head -1) ]] || apt-get install iproute2 -y &>/dev/null
+    [[ $(dpkg --get-selections|grep -w "nano"|head -1) ]] || apt-get install nano -y &>/dev/null
     [[ $(dpkg --get-selections|grep -w "bc"|head -1) ]] || apt-get install bc -y &>/dev/null
     [[ $(dpkg --get-selections|grep -w "screen"|head -1) ]] || apt-get install screen -y &>/dev/null
     [[ $(dpkg --get-selections|grep -w "python"|head -1) ]] || apt-get install python -y &>/dev/null
@@ -48,7 +49,6 @@ inst_components () {
     [[ $(dpkg --get-selections|grep -w "unzip"|head -1) ]] || apt-get install unzip -y &>/dev/null
     [[ $(dpkg --get-selections|grep -w "zip"|head -1) ]] || apt-get install zip -y &>/dev/null
     [[ $(dpkg --get-selections|grep -w "lsof"|head -1) ]] || apt-get install lsof -y &>/dev/null
-    [[ $(dpkg --get-selections|grep -w "git"|head -1) ]] || apt-get install git -y &>/dev/null
     [[ $(dpkg --get-selections|grep -w "apache2"|head -1) ]] || {
         apt-get install apache2 -y &>/dev/null
         sed -i "s;Listen 80;Listen 81;g" /etc/apache2/ports.conf
@@ -56,12 +56,11 @@ inst_components () {
     }
 }
 
-func_bahasa () {
+funcao_idioma () {
     msg -bar2
-    msg -ama "Silahkan pilih bahasa anda"
-    declare -A bahasa=( [1]="id Indonesia" [2]="en English" [3]="fr Franch" [4]="de German" [5]="it Italian" [6]="pl Polish" [7]="pt Portuguese" [8]="es Spanish" [9]="tr Turkish" )
+    declare -A idioma=( [1]="id Indonesia" [2]="en English" [3]="fr Franch" [4]="de German" [5]="it Italian" [6]="pl Polish" [7]="pt Portuguese" [8]="es Spanish" [9]="tr Turkish" )
     for ((i=1; i<=12; i++)); do
-        valor1="$(echo ${bahasa[$i]}|cut -d' ' -f2)"
+        valor1="$(echo ${idioma[$i]}|cut -d' ' -f2)"
         [[ -z $valor1 ]] && break
         valor1="\033[1;32m[$i] > \033[1;33m$valor1"
         while [[ ${#valor1} -lt 37 ]]; do
@@ -69,7 +68,7 @@ func_bahasa () {
         done
         echo -ne "$valor1"
         let i++
-        valor2="$(echo ${bahasa[$i]}|cut -d' ' -f2)"
+        valor2="$(echo ${idioma[$i]}|cut -d' ' -f2)"
         [[ -z $valor2 ]] && {
             echo -e " "
             break
@@ -80,7 +79,7 @@ func_bahasa () {
         done
         echo -ne "$valor2"
         let i++
-        valor3="$(echo ${bahasa[$i]}|cut -d' ' -f2)"
+        valor3="$(echo ${idioma[$i]}|cut -d' ' -f2)"
         [[ -z $valor3 ]] && {
             echo -e " "
             break
@@ -97,32 +96,16 @@ func_bahasa () {
         echo -ne "\033[1;37mPilih: " && read selection
         tput cuu1 && tput dl1
     done
-    pv="$(echo ${bahasa[$selection]}|cut -d' ' -f1)"
+    pv="$(echo ${idioma[$selection]}|cut -d' ' -f1)"
     [[ ${#id} -gt 2 ]] && id="id" || id="$pv"
     byinst="true"
 }
 
 install_fim () {
-    msg -ama "$(source trans -b pt:${id} "Instalasi selesai, Silahkan gunakan perintah"|sed -e 's/[^a-z -]//ig')" && msg bar2
-    echo -e " menu / cr4r"
+    msg -ama "$(source trans -b pt:${id} "Instalasi Selesai, Gunakan Perintah"|sed -e 's/[^a-z -]//ig')" && msg bar2
+    echo -e " menu / adm"
     msg -bar2
 }
-
-# install_hosts () {
-#     _arq_host="/etc/hosts"
-#     _host[0]="d1n212ccp6ldpw.cloudfront.net"
-#     _host[1]="dns.whatsapp.net"
-#     _host[2]="portalrecarga.vivo.com.br/recarga"
-#     _host[3]="navegue.vivo.com.br/controle/"
-#     _host[4]="navegue.vivo.com.br/pre/"
-#     _host[5]="www.whatsapp.net"
-#     _host[6]="c.whatsapp.net"
-#     for host in ${_host[@]}; do
-#         if [[ "$(grep -w "$host" $_arq_host | wc -l)" = "0" ]]; then
-#             sed -i "3i\127.0.0.1 $host" $_arq_host
-#         fi
-#     done
-# }
 
 ofus () {
     unset txtofus
@@ -152,46 +135,53 @@ verificar_arq () {
     [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
     [[ ! -d ${SCPinst} ]] && mkdir ${SCPinst}
     case $1 in
-        "menu"|"pesan.txt")ARQ="${SCPdir}/";; #Menu
+        "menu"|"message.txt")ARQ="${SCPdir}/";; #Menu
         "usercodes")ARQ="${SCPusr}/";; #User
-        "openssh.sh")ARQ="${SCPinst}/";; #Instalasi
-        "apache2.sh")ARQ="${SCPinst}/";; #Instalasi
-        "squid.sh")ARQ="${SCPinst}/";; #Instalasi
-        "dropbear.sh")ARQ="${SCPinst}/";; #Instalasi
-        "openvpn.sh")ARQ="${SCPinst}/";; #Instalasi
-        "ssl.sh")ARQ="${SCPinst}/";; #Instalasi
-        "shadowsocks.sh")ARQ="${SCPinst}/";; #Instalasi
-        "budp.sh")ARQ="${SCPinst}/";; #Instalasi
-        "sslh.sh")ARQ="${SCPinst}/";; #Instalasi
-        "vnc.sh")ARQ="${SCPinst}/";; #Instalasi
-        "webmin.sh")ARQ="${SCPinst}/";; #Instalasi
-        "v2ray.sh")ARQ="${SCPinst}/";; #Instalasi
-        "sockspy.sh"|"PDirect.py"|"PPub.py"|"PPriv.py"|"POpen.py"|"PGet.py")ARQ="${SCPinst}/";; #Instalasi
-        *)ARQ="${SCPfrm}/";; #Tools
+        "openssh.sh")ARQ="${SCPinst}/";; #Instalacao
+        "apache2.sh")ARQ="${SCPinst}/";; #Instalacao
+        "squid.sh")ARQ="${SCPinst}/";; #Instalacao
+        "dropbear.sh")ARQ="${SCPinst}/";; #Instalacao
+        "openvpn.sh")ARQ="${SCPinst}/";; #Instalacao
+        "ssl.sh")ARQ="${SCPinst}/";; #Instalacao
+        "shadowsocks.sh")ARQ="${SCPinst}/";; #Instalacao
+        "budp.sh")ARQ="${SCPinst}/";; #Instalacao
+        "sslh.sh")ARQ="${SCPinst}/";; #Instalacao
+        "vnc.sh")ARQ="${SCPinst}/";; #Instalacao
+        "webmin.sh")ARQ="${SCPinst}/";; #Instalacao
+        "v2ray.sh")ARQ="${SCPinst}/";; #Instalacao
+        "sockspy.sh"|"PDirect.py"|"PPub.py"|"PPriv.py"|"POpen.py"|"PGet.py")ARQ="${SCPinst}/";; #Instalacao
+        *)ARQ="${SCPfrm}/";; #Ferramentas
     esac
     mv -f ${SCPinstal}/$1 ${ARQ}/$1
     chmod +x ${ARQ}/$1
 }
 
+# Instalasi Dimulai
 fun_ip
 wget -O /usr/bin/trans https://raw.githubusercontent.com/cr4r/ssh/main/Install/trans &> /dev/null
 clear
 msg -bar2
-msg -ama "[ SCRIPT - VPN - SSH ]    \033[1;37m@cr4r"
-[[ $1 = "" ]] && func_bahasa || {
-    [[ ${#1} -gt 2 ]] && func_bahasa || id="$1"
+msg -ama "[ VPN - SSH - CR4R ]    \033[1;37m@cr4r"
+[[ $1 = "" ]] && funcao_idioma || {
+    [[ ${#1} -gt 2 ]] && funcao_idioma || id="$1"
 }
 error_fun () {
-    msg -bar2 && msg -verm "$(source trans -b pt:${id} "Kunci Ini Dari Server Lain Jadi Dihapus"|sed -e 's/[^a-z -]//ig') " && msg -bar2
+    msg -bar2 && msg -verm "$(source trans -b pt:${id} "Kunci yang anda gunakan dari server lain!"|sed -e 's/[^a-z -]//ig') " && msg -bar2
     [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}
     exit 1
 }
-REQUEST="https://raw.githubusercontent.com/cr4r/ssh/main/request"
+invalid_key () {
+    msg -bar2 && msg -verm "Key Failed! " && msg -bar2
+    [[ -e $HOME/lista-req ]] && rm $HOME/lista-req
+    exit 1
+}
+Key="qra-atsilK?29@%6087%?88d5K8888:%05+08+@@?+91"
+REQUEST=$(echo $SCPresq|$SUB_DOM)
 echo "$IP" > /usr/bin/vendor_code
 cd $HOME
 msg -ne "Files: "
-wget -O $HOME/lista-req ${REQUEST}/lista-req > /dev/null 2>&1 && echo -e "\033[1;32m Diverifikasi" || {
-    echo -e "\033[1;32m Diverifikasi"
+wget -O $HOME/lista-req ${REQUEST}/lista-req > /dev/null 2>&1 && echo -e "\033[1;32m Terverifikasi" || {
+    echo -e "\033[1;32m Tidak diverifikasi!"
     invalid_key
     exit
 }
@@ -199,10 +189,10 @@ sleep 1s
 updatedb
 if [[ -e $HOME/lista-req ]] && [[ ! $(cat $HOME/lista-req|grep "Key Salah!") ]]; then
     msg -bar2
-    msg -ama "$(source trans -b pt:${id} "Terima kasih sudah menggunkan tool ini"|sed -e 's/[^a-z -]//ig'): \033[1;31m"
+    msg -ama "$(source trans -b pt:${id} "BEM VINDO, OBRIGADO POR UTILIZAR"|sed -e 's/[^a-z -]//ig'): \033[1;31m[NEW-ULTIMATE]"
     [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
     pontos="."
-    stopping="$(source trans -b pt:${id} "Memeriksa Pembaruan"|sed -e 's/[^a-z -]//ig')"
+    stopping="$(source trans -b pt:${id} "Verificando Atualizacoes"|sed -e 's/[^a-z -]//ig')"
     for arqx in $(cat $HOME/lista-req); do
         msg -verm "${stopping}${pontos}"
         wget -O ${SCPinstal}/${arqx} ${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
@@ -221,10 +211,9 @@ if [[ -e $HOME/lista-req ]] && [[ ! $(cat $HOME/lista-req|grep "Key Salah!") ]];
     wget -O $HOME/versi https://raw.githubusercontent.com/cr4r/ssh/main/versi &> /dev/null
     wget -O /bin/versi_script https://raw.githubusercontent.com/cr4r/ssh/main/Install/versi &> /dev/null
     inst_components
-    # install_hosts
-    # echo "$Key" > ${SCPdir}/key.txt
+    echo "$Key" > ${SCPdir}/key.txt
     [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}
-    [[ ${#id} -gt 2 ]] && echo "id" > ${SCPbahasa} || echo "${id}" > ${SCPbahasa}
+    [[ ${#id} -gt 2 ]] && echo "id" > ${SCPidioma} || echo "${id}" > ${SCPidioma}
     [[ ${byinst} = "true" ]] && install_fim
 else
     invalid_key

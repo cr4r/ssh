@@ -1,8 +1,8 @@
 #!/bin/bash
 SCPdir="/etc/cr4r" && [[ ! -d ${SCPdir} ]] && exit 1
-SCPusr="${SCPdir}/ger-user" && [[ ! -d ${SCPusr} ]] && mkdir ${SCPusr}
+SCPusr="${SCPdir}/user" && [[ ! -d ${SCPusr} ]] && mkdir ${SCPusr}
 SCPfrm="/etc/ger-frm" && [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
-SCPinst="/etc/ger-inst" && [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
+SCPinst="/etc/inst" && [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
 SCPbahasa="${SCPdir}/bahasa" && [[ ! -e ${SCPbahasa} ]] && touch ${SCPbahasa}
 # VERIFICANDO  CONDIÃ‡Ã•ES PRIMARIAS
 [[ $(dpkg --get-selections|grep -w "jq"|head -1) ]] || apt-get install jq -y &>/dev/null
