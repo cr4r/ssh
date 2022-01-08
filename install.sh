@@ -14,6 +14,7 @@ SCPresq="aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NyNHIvc3NoL21haW4vcmVxdWV
 SUB_DOM='base64 -d'
 [[ $(dpkg --get-selections|grep -w "gawk"|head -1) ]] || apt-get install gawk -y &>/dev/null
 [[ $(dpkg --get-selections|grep -w "mlocate"|head -1) ]] || apt-get install mlocate -y &>/dev/null
+[[ $(dpkg --get-selections|grep -w "iproute2"|head -1) ]] || apt-get install iproute2 -y &>/dev/null
 rm $(pwd)/$0 &> /dev/null
 
 msg () {
@@ -135,7 +136,7 @@ verificar_arq () {
     [[ ! -d ${SCPfrm} ]] && mkdir ${SCPfrm}
     [[ ! -d ${SCPinst} ]] && mkdir ${SCPinst}
     case $1 in
-        "menu"|"message.txt")ARQ="${SCPdir}/";; #Menu
+        "menu"|"pesan.txt")ARQ="${SCPdir}/";; #Menu
         "usercodes")ARQ="${SCPusr}/";; #User
         "openssh.sh")ARQ="${SCPinst}/";; #Instalacao
         "apache2.sh")ARQ="${SCPinst}/";; #Instalacao
@@ -189,10 +190,10 @@ sleep 1s
 updatedb
 if [[ -e $HOME/lista-req ]] && [[ ! $(cat $HOME/lista-req|grep "Key Salah!") ]]; then
     msg -bar2
-    msg -ama "$(source trans -b pt:${id} "BEM VINDO, OBRIGADO POR UTILIZAR"|sed -e 's/[^a-z -]//ig'): \033[1;31m[NEW-ULTIMATE]"
+    msg -ama "$(source trans -b pt:${id} "SELAMAT DATANG, TERIMA KASIH TELAH MENGGUNAKAN"|sed -e 's/[^a-z -]//ig'): \033[1;31m[VPN-SSH]"
     [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
     pontos="."
-    stopping="$(source trans -b pt:${id} "Verificando Atualizacoes"|sed -e 's/[^a-z -]//ig')"
+    stopping="$(source trans -b pt:${id} "Memeriksa Pembaruan"|sed -e 's/[^a-z -]//ig')"
     for arqx in $(cat $HOME/lista-req); do
         msg -verm "${stopping}${pontos}"
         wget -O ${SCPinstal}/${arqx} ${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
