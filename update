@@ -1,4 +1,5 @@
-cp -r /etc/ger-* /root/ssh/etc
-cp -r /etc/cr4r /root/ssh/etc
-cp /etc/new-cr4r-color /root/ssh/etc
-cp /bin/badvpn-udpgw /root/ssh
+cp -r /etc/ger-frm/* /root/ssh/request
+cp -r /etc/cr4r/user/usercodes /root/ssh/request/usercodes
+cp -r /etc/cr4r/pesan.txt /root/ssh/request/pesan.txt
+cp -r /etc/cr4r/menu /root/ssh/request/menu
+cp -r /etc/inst/* /root/ssh/request
