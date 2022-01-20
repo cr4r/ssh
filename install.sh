@@ -7,7 +7,7 @@ SCPbahasa="${SCPdir}/bahasa"
 # SCPusr="${SCPdir}/ger-user"
 SCPusr="${SCPdir}/user"
 SCPfrm="/etc/ger-frm"
-# SCPinst="/etc/ger-inst"
+# SCPinst="/etc/ger-inst"/etc/user/
 SCPinst="/etc/inst"
 
 SCPresq="aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NyNHIvc3NoL21haW4vcmVxdWVzdA=="
@@ -190,7 +190,7 @@ sleep 1s
 updatedb
 if [[ -e $HOME/lista-req ]] && [[ ! $(cat $HOME/lista-req|grep "Key Salah!") ]]; then
     msg -bar2
-    msg -ama "$(source trans -b pt:${id} "SELAMAT DATANG, TERIMA KASIH TELAH MENGGUNAKAN"|sed -e 's/[^a-z -]//ig'): \033[1;31m[VPN-SSH]"
+    msg -ama "$(source trans -b pt:${id} "TERIMA KASIH TELAH MENGINSTALL"|sed -e 's/[^a-z -]//ig'): \033[1;31m[VPN-SSH]"
     [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
     pontos="."
     stopping="$(source trans -b pt:${id} "Memeriksa Pembaruan"|sed -e 's/[^a-z -]//ig')"
