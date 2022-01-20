@@ -104,7 +104,7 @@ fun_trans() {
     else
       retorno="$(source trans -e google -b pt:${LINGUAGE} "$@" | sed -e 's/[^a-z0-9 -]//ig' 2>/dev/null)"
     fi
-    if [[ $retorno != "" ]];then
+    if [[ $retorno != "" ]]; then
       echo "texto[$@]='$retorno'" >>/etc/texto-cr4r
       echo "$retorno"
     else
@@ -901,7 +901,7 @@ echo -ne "$(msg -verd "[0]") $(msg -verm2 ">") " && msg -bra "$(fun_trans "EXIT*
 # menu_func "MANAGE USERS*" "MANAGE TOOLS*" "MANAGE SYSTEM*" "-vd UPDATE SCRIPT*" "-vm UNINSTALL VPN-SSH*" "CHANGE COLOR SYSTEM*" "CHANGE SCRIPT LANGUAGE*" "-fi $AutoRun AUTORUN*" "INSTALLATION MENU"
 msg -bar
 # FIM
-alat_tool
+menu_inst
 
 # selection=$(selection_fun 9)
 # case ${selection} in
