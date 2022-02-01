@@ -57,3 +57,4 @@ git add .
 git checkout main
 git commit -m "$@"
 git push
+msg -bar

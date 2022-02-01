@@ -342,6 +342,17 @@ mine_port4() {
   done
 }
 
+mportas() {
+  unset portas
+  portas_var=$(lsof -V -i tcp -P -n | grep -v "ESTABLISHED" | grep -v "COMMAND" | grep "LISTEN")
+  while read port; do
+    var1=$(echo $port | awk '{print $1}') && var2=$(echo $port | awk '{print $9}' | awk -F ":" '{print $2}')
+    [[ "$(echo -e $portas | grep "$var1 $var2")" ]] || portas+="$var1 $var2\n"
+  done <<<"$portas_var"
+  i=1
+  echo -e "$portas"
+}
+
 ofus() {
   unset txtofus
   number=$(expr length $1)
@@ -602,11 +613,43 @@ os_system() {
   system=$(echo $(cat -n /etc/issue | grep 1 | cut -d' ' -f6,7,8 | sed 's/1//' | sed 's/      //'))
   echo $system | awk '{print $1, $2}'
 }
+
+hapusTools() {
+  if [[ "$1" == "stunnel4" ]]; then
+    msg -ama "Menghentikan stunnel4"
+    service stunnel4 stop &>/dev/null
+    service stunnel4 disable &>/dev/null
+    msg -ama "Menghapus stunnel4"
+    fun_bar "apt-get --purge remove stunnel4 -y"
+    msg -bar
+    rm -rf /etc/stunnel/stunnel.conf >/dev/null 2>&1
+    rm -rf /etc/stunnel >/dev/null 2>&1
+    msg -ama " $(fun_trans "Berhasil dihapus!")"
+  elif [[ "$1" == "shadowsocks" ]]; then
+    msg -ama " $(fun_trans "Menghentikan SHADOWSOCKS")"
+    [[ $(ps x | grep ssserver | grep -v grep | awk '{print $1}') != "" ]] && kill -9 $(ps x | grep ssserver | grep -v grep | awk '{print $1}') >/dev/null 2>&1 && ssserver -c /etc/shadowsocks.json -d stop >/dev/null 2>&1
+    msg -bar
+    msg -ama " $(fun_trans "Menghapus shadowsocks!")"
+    rm -rf /etc/shadowsocks* &>/dev/null
+    pip3 uninstall shadowsocks &>/dev/null
+  elif [[ "$1" == "dropbear" ]]; then
+    echo -e "\033[1;32m $(fun_trans "Menghapus Dropbear*")"
+    msg -bar
+    service dropbear disable &>/dev/null
+    service dropbear stop &>/dev/null
+    fun_bar "apt-get remove dropbear -y"
+    msg -bar
+    [[ -e /etc/default/dropbear ]] && rm -rf /etc/default/dropbear* &>/dev/null
+  else
+    msg -ama "Tidak ada yang dihapus"
+  fi
+}
+
 remove_script() {
   clear
   clear
   msg -bar2
-  msg -ama "$(fun_trans "KONFIRMASI PENGHAPUSAN TOTAL SKRIP")?"
+  msg -ama "$(fun_trans "Apakah anda yakin ingin menghapus semua skrip yang terpasang")?"
   msg -bar
   while [[ ${yesno} != @(s|S|y|Y|n|N) ]]; do
     read -p "[S/N]: " yesno
@@ -628,6 +671,10 @@ remove_script() {
     [[ -e /bin/payloads ]] && rm /bin/payloads
     [[ -e /bin/nettools.py ]] && rm /bin/nettools.py
     [[ -e $HOME/versao ]] && rm $HOME/versao
+
+    hapusTools stunnel4
+    hapusTools shadowsocks
+
     cd $HOME
     msg -ama "$(fun_trans "MENGHAPUS SKRIP SELESAI")?"
     msg -bar
@@ -886,6 +933,9 @@ export -f meu_ip
 export -f fun_ip
 export -f pid_inst
 export -f fun_bar
+export -f hapusTool
+export -f mportas
+export -f mine_port
 clear
 msg -bar
 # INFORMACOES DO SERVIDOR

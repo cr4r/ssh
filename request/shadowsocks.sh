@@ -5,22 +5,9 @@ SCPfrm="/etc/ger-frm" && [[ ! -d ${SCPfrm} ]] && exit
 SCPinst="/etc/inst" && [[ ! -d ${SCPinst} ]] && exit
 SCPbahasa="${SCPdir}/bahasa" && [[ ! -e ${SCPbahasa} ]] && touch ${SCPbahasa}
 
-mportas() {
-  unset portas
-  portas_var=$(lsof -V -i tcp -P -n | grep -v "ESTABLISHED" | grep -v "COMMAND" | grep "LISTEN")
-  while read port; do
-    var1=$(echo $port | awk '{print $1}') && var2=$(echo $port | awk '{print $9}' | awk -F ":" '{print $2}')
-    [[ "$(echo -e $portas | grep "$var1 $var2")" ]] || portas+="$var1 $var2\n"
-  done <<<"$portas_var"
-  i=1
-  echo -e "$portas"
-}
 fun_shadowsocks() {
   [[ -e /etc/shadowsocks.json ]] && {
-    [[ $(ps x | grep ssserver | grep -v grep | awk '{print $1}') != "" ]] && kill -9 $(ps x | grep ssserver | grep -v grep | awk '{print $1}') >/dev/null 2>&1 && ssserver -c /etc/shadowsocks.json -d stop >/dev/null 2>&1
-    msg -ama " $(fun_trans "SHADOWSOCKS Berhenti")"
-    msg -bar
-    rm /etc/shadowsocks.json
+    hapusTools shadowsocks
     return 0
   }
   echo -e "\033[1;32m $(fun_trans "Instalasi Shadowsocks*")CR4R"
@@ -61,8 +48,8 @@ fun_shadowsocks() {
   msg -bar
   msg -ama " $(fun_trans "Memulai instalasi")"
   msg -bar
-  fun_bar 'apt-get install python-pip python-m2crypto -y'
-  fun_bar 'pip install shadowsocks'
+  fun_bar 'apt-get install python3-pip python3-m2crypto -y'
+  fun_bar 'pip3 install shadowsocks'
   echo """{
   \"server\":\"0.0.0.0\",
   \"server_port\":\"$Lport\",
@@ -83,4 +70,5 @@ fun_shadowsocks() {
   msg -bar
   return 0
 }
+
 fun_shadowsocks

@@ -35,15 +35,8 @@ ssl_stunel() {
   if [[ -z $(dpkg --get-selections | grep -w "stunnel4" | head -1) || -e /etc/stunnel/stunnel.conf ]]; then
     msg -ama " $(fun_trans "Mereset Stunnel")"
     msg -bar
-    service stunnel4 stop &>/dev/null
-    service stunnel4 disable &>/dev/null
-    fun_bar "apt-get --purge remove stunnel4 -y"
+    hapusTools stunnel4
     msg -bar
-    msg -ama " $(fun_trans "Berhasil dihapus!")"
-    rm -rf /etc/stunnel/stunnel.conf >/dev/null 2>&1
-    rm -rf /etc/stunnel >/dev/null 2>&1
-    msg -bar
-    # return 0
   fi
   clear
   clear
