@@ -640,6 +640,16 @@ hapusTools() {
     fun_bar "apt-get remove dropbear -y"
     msg -bar
     [[ -e /etc/default/dropbear ]] && rm -rf /etc/default/dropbear* &>/dev/null
+  elif [[ "$1" == "apache" ]]; then
+    msg -ama " $(fun_trans "Hapus Apache2")"
+    msg -bar
+    /etc/init.d/apache2 stop >/dev/null 2>&1
+    fun_bar "sleep 3s"
+    apt-get --purge remove apache2 -y &>/dev/null
+    msg -bar
+    msg -ama " $(fun_trans "Apache2 sudah dihapus!")"
+    [[ -d /etc/apache2 ]] && rm -rf /etc/apache2
+    msg -bar
   else
     msg -ama "Tidak ada yang dihapus"
   fi
@@ -933,9 +943,14 @@ export -f meu_ip
 export -f fun_ip
 export -f pid_inst
 export -f fun_bar
-export -f hapusTool
+export -f hapusTools
 export -f mportas
 export -f mine_port
+export -f SCPdir
+export -f SCPusr
+export -f SCPfrm
+export -f SCPinst
+export -f SCPbahasa
 clear
 msg -bar
 # INFORMACOES DO SERVIDOR
